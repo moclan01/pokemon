@@ -1,23 +1,23 @@
-table{
-    
+
+.container{
+    background-color: rgb(235, 133, 0);
+    width: 1200px;
 }
 
-td,
-th {
-    border: 1px solid black;
-    text-align: center;
-    padding: 8px;
-}
-
-td{
-    width: 32px;
-    height: 32px;
+.infor{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
 }
 
 .boder{
-    background-color: rgb(247, 100, 100);
+    background-color: red;
 }
 
-.inner-part{
-    background-color: rgb(19, 197, 197);
+.inner-part {
+    background-color: aqua;
+}
+.game-board .board-item{
+    width: 48px;
+    height: 48px;
 }

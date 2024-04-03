@@ -1,4 +1,5 @@
 const image = [
+    "image/pokemon0.png",
     "image/pokemon1.png",
     "image/pokemon2.png",
     "image/pokemon3.png",
@@ -30,25 +31,74 @@ const image = [
     "image/pokemon29.png",
     "image/pokemon30.png",
     "image/pokemon31.png",
-    "image/pokemon32.png",
-    "image/pokemon33.png"
+    "image/pokemon32.png"
 ];
 
-//board
-var size = 11;
-$(document).ready(function board() {
-    var matrixHtml = '<table boder="1">';
-    for (var i = 0; i < size; i++) {
-        matrixHtml += '<tr>';
-        for (var j = 0; j < size; j++) {
-            if (i === 0 || i === (size - 1) || j === 0 || j === (size - 1)) {
-                matrixHtml += '<td class="boder">' + '(' + (i + 1) + ',' + (j + 1) + ')</td>';
-            }else{
-                matrixHtml += '<td class="inner-part">' + '(' + (i + 1) + ',' + (j + 1) + ')</td>';
+const arrTime = [10000, 9000, 8000, 7000, 6000, 5000];
+const arrShuffle = [30, 25, 20, 15, 15, 10];
+const arrLevel = [1, 2, 3, 4, 5, 6]
+var disapper = false;
+var rowGameBoard = 17;
+var colGameBoard = 21;
+let urlImage = 'image/pokemon';
+let extensionImage = '.png';
+
+const container = document.getElementById('#container');
+const scoreMain = document.getElementById('#score-main');
+let score = document.getElementById('#score');
+const levelMain = document.getElementById('#level-main');
+let level = document.getElementById('#level');
+const shuffleMain = document.getElementById('#shuffle-main');
+let shuffle = document.getElementById('#shuffle');
+const board = document.getElementById('#game-board');
+
+//dữ liệu người chơi
+let playerData = {
+    score: 0,
+    currentLevel: arrLevel[0],
+    maxLevel: arrLevel[arrLevel.length - 1],
+    timeIndex: arrTime[0],
+    win: false,
+    shuffle: arrShuffle[0]
+};
+
+//tạo bảng game
+function createGameBoard(row, col) {
+    let arrImage = loadImage();
+    let Items = new Array();
+    //tạo mảng với giá trị các ô là 0
+    let arrBoard = Array.from({ length: row + 1}, () => Array.from({ length: col + 1 }, () => 0));
+    let boardHtml = "";
+    $('#level').text(playerData.currentLevel);
+
+    for (var i = 0; i < arrBoard.length; i++) {
+        if (i !== 0 && i !== (arrBoard.length - 1)) {
+            boardHtml += "<div class=\"row-board\">";
+            for (var j = 0; j < arrBoard[i].length; j++) {
+                if (j !== 0 && j !== (arrBoard.length - 1)) {
+                    arrBoard[i][j] = 1;
+                    boardHtml += "<button id=\"btn" + i + '-' + j + "\" class=\"board-item\" x=" + i + " \"y=" + j + "></button>";
+                    Items.push({
+                        x: i,
+                        y: j
+                    });
+
+                }
             }
+            boardHtml += "</div>";
+
         }
-        matrixHtml += '</tr>'
     }
-    matrixHtml += '</table>';
-    $('#board').html(matrixHtml);
-});
+    document.querySelector('#game-board').innerHTML += boardHtml;
+};
+
+createGameBoard(rowGameBoard, colGameBoard);
+
+//load ảnh
+function loadImage() {
+    var arrImg = [];
+    for (var i = 0; i < image.length; i++) {
+        arrImg.push(image[i]);
+    }
+    return arrImg;
+};
