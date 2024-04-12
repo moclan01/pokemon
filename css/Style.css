@@ -1,0 +1,25 @@
+.container {
+  background-color: rgb(235, 133, 0);
+  width: 1200px;
+}
+
+.infor {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.boder {
+  background-color: red;
+}
+
+.inner-part {
+  background-color: aqua;
+}
+
+.game-board .board-item {
+  width: 48px;
+  height: 48px;
+}
+
+/*# sourceMappingURL=Style.css.map */
