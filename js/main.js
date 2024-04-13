@@ -44,8 +44,8 @@ const arrTime = [10000, 9000, 8000, 7000, 6000, 5000];
 const arrShuffle = [30, 25, 20, 15, 15, 10];
 const arrLevel = [1, 2, 3, 4, 5, 6]
 var disapper = false;
-var rowGameBoard = 18;
-var colGameBoard = 22;
+var rowGameBoard = 14;
+var colGameBoard = 16;
 let urlImage = './image/pokemon';
 let extensionImage = '.png';
 
@@ -166,17 +166,18 @@ function checkTwoPoint(x1, y1, x2, y2) {
         //lấy vị trí đầu và cuối của 2 ô trong 1 hàng
         let beginRow = Math.min(y1, y2);
         let endRow = Math.max(y1, y2);
-        //kiểm tra 2 ô liền kề
-        if ((endRow - beginRow) === 1) {
-            return true;
-        }
+        //kiểm tra 2 ô liền kề (thừa)
+        // if ((endRow - beginRow) === 1) {
+        //     return true;
+        // }
         //kiểm tra giữa 2 ô được chọn
         for (var i = beginRow + 1; i < endRow; i++) {
             if (arrBoard[x][i] !== 0) {
                 return false;
             }
-        }
 
+        }
+        console.log("check1LineRow:" + (endRow - beginRow));
         return true;
     };
 
@@ -191,9 +192,11 @@ function checkTwoPoint(x1, y1, x2, y2) {
                 return false;
             }
         }
-        if ((endCol - beginCol) === 1) {
-            return true;
-        }
+        // if ((endCol - beginCol) === 1) {
+        //     return true;
+        // }
+        console.log("check1LineCol:" + (endCol - beginCol));
+
         return true;
     };
 
@@ -202,7 +205,7 @@ function checkTwoPoint(x1, y1, x2, y2) {
         //kiểm tra theo chiều dọc
         //kiểm tra góc quẹo ở cột
         //vd: ảnh 1(1,1) -> ảnh 2(2,3): sẽ đi qua lần lượt các điểm (2,1), (2,2) (giống chữ L nằm dọc)
-        function check2LineCol(x1, x2, y1, y2) {
+        function check2LineCol(x1, y2, x1, y2) {
             //đặt điểm p1 là điểm nhỏ nhất,  điểm p2 là lớn nhất 
             let pMinY = { x: x1, y: y1 };
             let pMaxY = { x: x2, y: y2 };
@@ -211,6 +214,7 @@ function checkTwoPoint(x1, y1, x2, y2) {
                 pMinY = { x: x2, y: y2 };
                 pMaxY = { x: x1, y: y1 };
             }
+
             for (var i = pMinY.y; i <= pMaxY.y; i++) {
                 if (i > pMinY.y && arrBoard[pMinY.x][i] !== 0) {
                     return false;
@@ -222,16 +226,18 @@ function checkTwoPoint(x1, y1, x2, y2) {
                     && check1LineCol(pMinY.x, pMaxY.x, i)
                     && check1LineRow(pMaxY.x, i, pMaxY.y)
                 ) {
+                    console.log("check2LineCol:" + pMinY + "," + pMaxY);
                     return true;
                 }
             }
+
             return false;
         }
 
         //kiểm tra theo chiều ngang
         //kiểm tra góc quẹo ở hàng
         //vd: ảnh 1(1,1) -> ảnh 2(2,3): sẽ đi qua lần lượt các điểm (1,2), (1,3) (giống chữ L nằm ngang)
-        function check2LineRow(x1, x2, y1, y2) {
+        function check2LineRow(x1, y1, x2, y2) {
             let pMinX = { x: x1, y: y1 };
             let pMaxX = { x: x2, y: y2 };
             //ngược lại, đổi vị trí 2 điểm cho nhau
@@ -239,8 +245,9 @@ function checkTwoPoint(x1, y1, x2, y2) {
                 pMinX = { x: x2, y: y2 };
                 pMaxX = { x: x1, y: y1 };
             }
+
             for (var i = pMinX.x; i <= pMaxX.x; i++) {
-                if (i > pMinX.x && arrBoard[i][pMinX.y] != 0) {
+                if (i > pMinX.x && arrBoard[i][pMinX.y] !== 0) {
                     return false;
                 }
                 //kiểm tra đường đi của 2 hàng
@@ -249,17 +256,19 @@ function checkTwoPoint(x1, y1, x2, y2) {
                     && check1LineRow(i, pMinX.y, pMaxX.y)
                     && check1LineCol(i, pMaxX.x, pMaxX.y)
                 ) {
+                    console.log("check2LineRow:" + pMinX + "," + pMaxX);
                     return true;
                 }
             }
+
             return false;
         }
-        return check2LineRow(x1, x2, y1, y2)
-            || check2LineCol(x1, x2, y1, y2);
+        return check2LineRow(x1, y1, x2, y2)
+            || check2LineCol(x1, y1, x2, y2);
     };
 
     //Kiểm tra 3 đường (chữ U,chữ Z)
-    function check3Line(x1, x2, y1, y2) {
+    function check3Line(x1, y1, x2, y2) {
         //kiểm tra theo chiều ngang
         function check3LineRow(x1, x2, y1, y2, index) {
             let pMinY = { x: x1, y: y1 };
@@ -272,48 +281,101 @@ function checkTwoPoint(x1, y1, x2, y2) {
 
             //ảnh 1 trên, ảnh 2 dưới
             let beginRow = pMinY.x;
+            let beginCol = pMinY.y;
             // cột sẽ dịch dần từ trái qua phải nếu index = 1, lùi lại nếu index = -1
-            let col = pMinY.y + index;
+            let y = pMaxY.y + index;
             let endCol = pMaxY.y;
             let endRow = pMaxY.x;
             if (index === -1) {
                 beginRow = pMaxY.x;
-                col = pMaxY.y + index;
+                beginCol = pMaxY.y;
+                y = pMinY.y + index;
                 endCol = pMinY.y;
                 endRow = pMinY.x;
             }
-            //ra được chữ Z dọc lẫn ngang ??????
-            if ((arrBoard[beginRow][col] === 0 || pMinY.y === pMaxY.y) && check1LineRow(beginRow,col,endCol)) {
-                while(arrBoard[beginRow][col] === 0 && arrBoard[endRow][col] === 0){
-                    if(check1LineCol(beginRow,endRow,col)){
+
+            if (
+                (arrBoard[beginRow][endCol] === 0 
+                || pMinY.y === pMaxY.y) 
+                && check1LineRow(beginRow,pMinY.y, pMaxY.y)
+            ) {
+                while (arrBoard[pMinY.x][y] === 0 && arrBoard[pMaxY.x][y] === 0) {
+                    if (check1LineCol(pMinY.x, pMaxY.x, y)) {
                         return true;
                     }
-                    col += index;
+                    y += index;
                 }
 
             }
             return false;
         };
 
+        //kiểm tra theo chiều dọc
+        function check3LineCol(x1, y1, x2, y2, index) {
+            let pMinY = { x: x1, y: y1 };
+            let pMaxY = { x: x2, y: y2 };
+            //ngược lại, đổi vị trí 2 điểm cho nhau
+            if (x1 > x2) {
+                pMinY = { x: x2, y: y2 };
+                pMaxY = { x: x1, y: y1 };
+            }
 
-        function check3LineCol(x1, x2, y1, y2, index) {
+            //ảnh 1 trên, ảnh 2 dưới
+            let beginRow = pMinY.x;
+            let beginCol = pMinY.y;
+            // hàng sẽ dịch dần từ trên xuống nếu index = 1, dưới lên nếu index = -1
+            let x = pMaxY.x + index;
+            let endCol = pMaxY.y;
+            let endRow = pMaxY.x;
+            if (index === -1) {
+                beginRow = pMaxY.x;
+                beginCol = pMaxY.y;
+                x = pMinY.x + index;
+                endCol = pMinY.y;
+                endRow = pMinY.x;
+            }
 
+            if ((arrBoard[endRow][beginCol] === 0 
+                || beginRow === endRow) 
+                && check1LineCol(pMinY.x, pMaxY.x, beginCol)) {
+                while (arrBoard[x][pMinY.y] === 0 && arrBoard[x][pMaxY.y] === 0) {
+                    if (check1LineRow(x, beginCol, x)) {
+                        return true;
+                    }
+                    x += index;
+                }
+            }
+            return false;
         };
-        return check3LineRow(x1, x2, y1, y2, 1)
-            || check3LineRow(x1, x2, y1, y2, -1)
-            || check3LineCol(x1, x2, y1, y2, 1)
-            || check3LineCol(x1, x2, y1, y2, -1);
+        return check3LineRow(x1, y1, x2, y2, 1)
+            || check3LineRow(x1, y1, x2, y2, -1)
+            || check3LineCol(x1, y1, x2, y2, 1)
+            || check3LineCol(x1, y1, x2, y2, -1);
     }
 
     //kiểm tra vị trí của 2 ảnh
+    // if (x1 !== x2 && y1 !== y2 && arrBoard[x1][y1] === arrBoard[x2][y2]) {
+    //     if (x1 == x2) {
+    //         return check1LineRow(x1, y1, y2);
+    //     }
+    //     if (y1 == y2) {
+    //         return check1LineCol(x1, x2, y1);
+    //     }
+    //     return check2Line(x1, y1, x2, y2)
+    //         || check3Line(x1, x2, y1, y2);
+    // }
+
     if (x1 === x2 && y1 !== y2 && arrBoard[x1][y1] === arrBoard[x2][y2]) {
         return check1LineRow(x1, y1, y2);
-    } else if (y1 === y2 && x1 !== x2 && arrBoard[x1][y1] === arrBoard[x2][y2]) {
+    }
+    if (y1 === y2 && x1 !== x2 && arrBoard[x1][y1] === arrBoard[x2][y2]) {
         return check1LineCol(x1, x2, y1);
-    } else {
+    }
+    if (x1 !== x2 && y1 !== y2 && arrBoard[x1][y1] === arrBoard[x2][y2]) {
         return check2Line(x1, y1, x2, y2)
             || check3Line(x1, y1, x2, y2);
     }
+    return false;
 };
 
 
