@@ -1,25 +1,36 @@
+button {
+  margin: 0;
+  padding: 0;
+}
+
+image {
+  margin: 0;
+  padding: 0;
+}
+
 .container {
   background-color: rgb(235, 133, 0);
   width: 1200px;
 }
-
-.infor {
+.container .infor {
   display: flex;
   justify-content: space-around;
   width: 100%;
 }
-
-.boder {
-  background-color: red;
+.container .game-board .row-board {
+  display: flex;
 }
-
-.inner-part {
-  background-color: aqua;
-}
-
-.game-board .board-item {
+.container .game-board .row-board .board-item {
   width: 48px;
   height: 48px;
+  margin: 0;
+  padding: 0;
+}
+.container .game-board .row-board .item-hidden {
+  background-color: transparent;
+  background-image: none !important;
+  border: none;
+  padding: 2px;
 }
 
 /*# sourceMappingURL=Style.css.map */

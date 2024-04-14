@@ -1,22 +1,51 @@
-.container{
+button {
+  margin: 0;
+  padding: 0;
+}
+
+image {
+  margin: 0;
+  padding: 0;
+}
+
+
+.container {
   background-color: rgb(235, 133, 0);
   width: 1200px;
-}
 
-.infor{
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-}
+  .infor {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
 
-.boder{
-  background-color: red;
-}
+    .score {}
 
-.inner-part {
-  background-color: aqua;
-}
-.game-board .board-item{
-  width: 48px;
-  height: 48px;
+    .shuffle {}
+
+    .time {}
+  }
+
+  .game-board {
+    .row-board {
+      display: flex;
+
+      .board-item {
+        width: 48px;
+        height: 48px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .item-hidden {
+        background-color: transparent;
+        background-image: none !important;
+        border: none;
+        padding: 2px;
+      }
+    }
+
+    
+  }
+
+
 }
