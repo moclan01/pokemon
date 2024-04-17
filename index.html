@@ -10,25 +10,68 @@
 </head>
 
 <body>
-    <div id="container" class="container">
-        <h1>Pikachu</h1>
-        <div class="infor">
-            <div id="score-main" class="score">
-                Score: <span id="score"></span>
-            </div>
-            <div id="level-main" class="level">
-                Level: <span id="level"></span>
-            </div>
-            <div id="shuffle-main" class="shuffle">
-                Shuffle: <span id="shuffle"></span>
-            </div>
-            <div id="time-main" class="time">
-                Time: <span id="time"></span>
+    <div class="container">
+        <div id="title" class="title">
+            <h1>Pikachu</h1>
+            <div class="infor">
+                <div id="score-main" class="score">
+                    Điểm: <span id="score"></span>
+                </div>
+                <div id="level-main" class="level">
+                    Level: <span id="level"></span>
+                </div>
+                <div id="shuffle-main" class="shuffle">
+                    Lượt đổi: <span id="shuffle"></span>
+                </div>
+                <div id="time-main" class="time">
+                    Thời gian: <span id="time"></span>
+                </div>
             </div>
         </div>
         <div class="main">
+            <div class="action-game">
+                <button class="action-button" id="random-imgs-btn">
+                    Đổi lại
+                </button>
+                <button class="action-button" id="reset-game-btn">
+                    Chơi lại
+                </button>
+                <button class="action-button" id="select-level-btn">
+                    Level
+                </button>
+            </div>
             <div id="game-board" class="game-board">
+            </div>
+            <div class="game-instruction">
+                <h2>Hướng dẫn trò chơi</h2>
+                <div class="game-instruction-content" id="game-instruction-content">
 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="select-level">
+        <div class="modal-dialog" id="modal-dialog">
+            <h2>Chọn level</h2>
+            <div class="modal-dialog-content">
+                <button id="1" class="level-btn">
+                    Level 1
+                </button>
+                <button id="2" class="level-btn">
+                    Level 2
+                </button>
+                <button id="3" class="level-btn">
+                    Level 3
+                </button>
+                <button id="4" class="level-btn">
+                    Level 4
+                </button>
+                <button id="5" class="level-btn">
+                    Level 5
+                </button>
+                <button id="6" class="level-btn">
+                    Level 6
+                </button>
             </div>
         </div>
     </div>
