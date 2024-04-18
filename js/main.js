@@ -89,6 +89,7 @@ $(document).ready(function () {
         clearInterval(countDownInterval);
         $('.row-board').remove();
         createGameBoard(rowGameBoard, colGameBoard);
+        handleClick();
         countDownTime(playerData.timeIndex);
 
         $('#level').html(playerData.currentLevel);
@@ -100,10 +101,23 @@ $(document).ready(function () {
 
     //tạo bảng game
     function createGameBoard(row, col) {
-
-        $('#level').text(playerData.currentLevel);
+        playerData.score = 0;
         $('#score').text(playerData.score);
-        $('#shuffle').text(playerData.shuffle);
+
+        // Đặt lại cấp độ của người chơi về cấp độ mặc định
+        $('#level').html(playerData.currentLevel);
+
+        // Đặt lại thời gian của người chơi về thời gian mặc định
+        $('#time').html(playerData.timeIndex);
+
+        // Đặt lại số lượt trộn của người chơi về số lượt trộn mặc định
+        $('#shuffle').html(playerData.shuffle);
+
+        // Dừng và đặt lại interval đếm ngược nếu đang chạy
+        clearInterval(countDownInterval);
+
+        // Bắt đầu lại đếm ngược thời gian
+        countDownTime(playerData.timeIndex);
 
         let arrBoard = Array.from({ length: row }, () => Array.from({ length: col }, () => 0));
         let itemList = new Array();
@@ -211,14 +225,12 @@ $(document).ready(function () {
                 $(currentItem).addClass("item-hidden");
                 $(currentItem).attr("disabled", true);
 
-                arrBoard[x2][y2] = 0;
                 arrBoard[x1][y1] = 0;
+                arrBoard[x2][y2] = 0;
                 playerData.score += 50;
                 $("#score").text(playerData.score);
 
                 console.log(arrBoard)
-                // moveToLeftSide()
-                // checkWinCondition()
             } else chooseFalse()
         } else chooseFalse()
     }
@@ -394,11 +406,20 @@ $(document).ready(function () {
         console.log('random images');
         randomPokemon();
     })
+    $('#reset-game-btn').on('click', function () {
+        console.log('reset game')
+        resetGame();
+    })
 
     // function createLevel(level) {
 
     // }
     function randomPokemon() {
+
+        // Xoá lớp "selecting" từ các phần tử
+        $(".selecting").removeClass("selecting");
+        selectingItem = null;
+
         //add ảnh hiện tại chưa ăn vào 1 list
         let ImgExists = [];
         let locationBtnExist = []
@@ -418,14 +439,14 @@ $(document).ready(function () {
 
         //thêm các ảnh ngẫu nhiên từ list ảnh trên vào lần lượt các button
         for (let i = 0; i < locationBtnExist.length; i++) {
-            if(urlImage.length > 0){
+            if (urlImage.length > 0) {
                 let rdIndex = Math.floor(Math.random() * urlImage.length);
                 let rdImg = urlImage[rdIndex];
                 if (rdIndex > -1) {
                     urlImage.splice(rdIndex, 1);
                 }
                 $(locationBtnExist[i]).css("background-image", "url(\"" + rdImg + "\"")
-            }else {
+            } else {
                 break;
             }
 
@@ -463,7 +484,32 @@ $(document).ready(function () {
 
 
     function resetGame() {
+        // Đặt lại điểm số của người chơi về 0
+        playerData.score = 0;
+        $('#score').text(playerData.score);
 
+        // Đặt lại cấp độ của người chơi về cấp độ mặc định
+        $('#level').html(playerData.currentLevel);
+
+        // Đặt lại thời gian của người chơi về thời gian mặc định
+        $('#time').html(playerData.timeIndex);
+
+        // Đặt lại số lượt trộn của người chơi về số lượt trộn mặc định
+        $('#shuffle').html(playerData.shuffle);
+
+        // Dừng và đặt lại interval đếm ngược nếu đang chạy
+        clearInterval(countDownInterval);
+
+        // Xóa hết các button hiện tại trên bảng game
+        $('.row-board').remove();
+
+        // Tạo lại bảng game với kích thước và trạng thái ban đầu
+        arrBoard = createGameBoard(rowGameBoard, colGameBoard);
+
+        handleClick();
+
+        // Bắt đầu lại đếm ngược thời gian
+        countDownTime(playerData.timeIndex);
     }
 
     //level1
