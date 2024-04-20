@@ -567,7 +567,43 @@ $(document).ready(function () {
     //khi ta di chuyển chuột vào vùng nào thì vùng đó sẽ sáng lên (toàn bộ bàn đều chìm vào bóng đêm)
     //dùng opacity
     function level4(){
-        $('.row-board').addClass('')
+        for (let i = 1; i < rowGameBoard - 1; i++) {
+            for (let j = 1; j < colGameBoard - 1; j++) {
+              let id = i * colGameBoard + j;
+              let btnId = `#btn${i}-${j}`;
+              $(btnId).mouseover(function () {
+                // Thiết lập opacity của ô và các ô láng giềng của nó thành 1
+                for (let k = -1; k <= 1; k++) {
+                  for (let l = -1; l <= 1; l++) {
+                    let neighborId = (i + k) * colGameBoard + (j + l);
+                    if (
+                      neighborId >= colGameBoard &&
+                      neighborId < (rowGameBoard - 1) * colGameBoard &&
+                      neighborId % colGameBoard !== 0 &&
+                      (neighborId + 1) % colGameBoard !== 0
+                    ) {
+                      $(`#btn${i + k}-${j + l}`).css("opacity", "1");
+                    }
+                  }
+                }
+              }).mouseout(function () {
+                // Đặt lại opacity của ô và các ô láng giềng của nó về 0
+                for (let k = -1; k <= 1; k++) {
+                  for (let l = -1; l <= 1; l++) {
+                    let neighborId = (i + k) * colGameBoard + (j + l);
+                    if (
+                      neighborId >= colGameBoard &&
+                      neighborId < (rowGameBoard - 1) * colGameBoard &&
+                      neighborId % colGameBoard !== 0 &&
+                      (neighborId + 1) % colGameBoard !== 0
+                    ) {
+                      $(`#btn${i + k}-${j + l}`).css("opacity", "0");
+                    }
+                  }
+                }
+              });
+            }
+          }
     }
 
     //level 5
