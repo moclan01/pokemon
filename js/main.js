@@ -50,6 +50,7 @@ $(document).ready(function () {
     let countDownInterval;
     var intervalLV3;
     var isLevel2 = false;
+    var isLevel4 = false;
 
     //dữ liệu người chơi
     let playerData = {
@@ -127,6 +128,10 @@ $(document).ready(function () {
         // console.log(itemList.length);
         if (isLevel2) {
             getWall(itemList, arrBoard);
+        }
+
+        if (isLevel4){
+            level4();
         }
 
         while (itemList.length > 0) {
@@ -395,6 +400,7 @@ $(document).ready(function () {
     $('#2').on('click', function () {
         console.log('level 2');
         isLevel2 = true;
+        isLevel4 = false;
         updateDataPlayer(2);
         clearInterval(intervalLV3);
         level2();
@@ -402,15 +408,16 @@ $(document).ready(function () {
     $('#3').on('click', function () {
         console.log('level 3');
         isLevel2 = false;
+        isLevel4 = false;
         updateDataPlayer(3);
         level3();
     })
     $('#4').on('click', function () {
         console.log('level 4');
         isLevel2 = false;
+        isLevel4 = true;
         clearInterval(intervalLV3);
         updateDataPlayer(4);
-        level4();
     })
     $('#5').on('click', function () {
         console.log('level 5');
@@ -418,13 +425,6 @@ $(document).ready(function () {
         clearInterval(intervalLV3);
         updateDataPlayer(5);
         level5()
-    })
-    $('#6').on('click', function () {
-        console.log('level 6');
-        isLevel2 = false;
-        clearInterval(intervalLV3);
-        updateDataPlayer(6);
-        level6();
     })
     $('#random-imgs-btn').on('click', function () {
         console.log('random images');
@@ -566,55 +566,49 @@ $(document).ready(function () {
     //level 4
     //khi ta di chuyển chuột vào vùng nào thì vùng đó sẽ sáng lên (toàn bộ bàn đều chìm vào bóng đêm)
     //dùng opacity
-    function level4(){
+    function level4() {
         for (let i = 1; i < rowGameBoard - 1; i++) {
             for (let j = 1; j < colGameBoard - 1; j++) {
-              let id = i * colGameBoard + j;
-              let btnId = `#btn${i}-${j}`;
-              $(btnId).mouseover(function () {
-                // Thiết lập opacity của ô và các ô láng giềng của nó thành 1
-                for (let k = -1; k <= 1; k++) {
-                  for (let l = -1; l <= 1; l++) {
-                    let neighborId = (i + k) * colGameBoard + (j + l);
-                    if (
-                      neighborId >= colGameBoard &&
-                      neighborId < (rowGameBoard - 1) * colGameBoard &&
-                      neighborId % colGameBoard !== 0 &&
-                      (neighborId + 1) % colGameBoard !== 0
-                    ) {
-                      $(`#btn${i + k}-${j + l}`).css("opacity", "1");
+                let id = i * colGameBoard + j;
+                let btnId = `#btn${i}-${j}`;
+                $(btnId).mouseover(function () {
+                    // Thiết lập opacity của ô và các ô láng giềng của nó thành 1
+                    for (let k = -1; k <= 1; k++) {
+                        for (let l = -1; l <= 1; l++) {
+                            let neighborId = (i + k) * colGameBoard + (j + l);
+                            if (
+                                neighborId >= colGameBoard &&
+                                neighborId < (rowGameBoard - 1) * colGameBoard &&
+                                neighborId % colGameBoard !== 0 &&
+                                (neighborId + 1) % colGameBoard !== 0
+                            ) {
+                                $(`#btn${i + k}-${j + l}`).css("opacity", "1");
+                            }
+                        }
                     }
-                  }
-                }
-              }).mouseout(function () {
-                // Đặt lại opacity của ô và các ô láng giềng của nó về 0
-                for (let k = -1; k <= 1; k++) {
-                  for (let l = -1; l <= 1; l++) {
-                    let neighborId = (i + k) * colGameBoard + (j + l);
-                    if (
-                      neighborId >= colGameBoard &&
-                      neighborId < (rowGameBoard - 1) * colGameBoard &&
-                      neighborId % colGameBoard !== 0 &&
-                      (neighborId + 1) % colGameBoard !== 0
-                    ) {
-                      $(`#btn${i + k}-${j + l}`).css("opacity", "0");
+                }).mouseout(function () {
+                    // Đặt lại opacity của ô và các ô láng giềng của nó về 0
+                    for (let k = -1; k <= 1; k++) {
+                        for (let l = -1; l <= 1; l++) {
+                            let neighborId = (i + k) * colGameBoard + (j + l);
+                            if (
+                                neighborId >= colGameBoard &&
+                                neighborId < (rowGameBoard - 1) * colGameBoard &&
+                                neighborId % colGameBoard !== 0 &&
+                                (neighborId + 1) % colGameBoard !== 0
+                            ) {
+                                $(`#btn${i + k}-${j + l}`).css("opacity", "0");
+                            }
+                        }
                     }
-                  }
-                }
-              });
+                });
             }
-          }
+        }
     }
 
     //level 5
     // mỗi 10s thêm 1 cặp hình bất kì vô các ô trống đã ăn
-    function level5(){
-
-    }
-
-    //level 6
-    //
-    function level6(){
+    function level5() {
 
     }
 })
