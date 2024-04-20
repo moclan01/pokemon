@@ -51,6 +51,7 @@ $(document).ready(function () {
     var intervalLV3;
     var isLevel2 = false;
     var isLevel4 = false;
+    var isLevel5 = false;
 
     //dữ liệu người chơi
     let playerData = {
@@ -111,11 +112,11 @@ $(document).ready(function () {
 
         let boardHtml = "";
         //tạo các button chứa hình ảnh pokemon trong ma trận
-        for (let i = 1; i < arrBoard.length - 1; i++) {
+        for (let i = 1; i < arrBoard.length; i++) {
             if (i !== 0 && i !== (arrBoard.length - 1)) {
                 boardHtml += "<div class=\"row-board\">";
-                for (let j = 1; j < arrBoard[i].length - 1; j++) {
-                    if (j !== 0 && j !== (arrBoard.length - 1)) {
+                for (let j = 1; j < arrBoard[i].length; j++) {
+                    if (j !== 0 && j !== (arrBoard[i].length - 1)) {
                         arrBoard[i][j] = 1;
                         boardHtml += "<button id='btn" + i + "-" + j + "' class=\"board-item\" x=" + i + " y=" + j + "></button>";
                         itemList.push({ x: i, y: j });
@@ -130,8 +131,11 @@ $(document).ready(function () {
             getWall(itemList, arrBoard);
         }
 
-        if (isLevel4){
+        if (isLevel4) {
             level4();
+        }
+        if (isLevel5) {
+            level5();
         }
 
         while (itemList.length > 0) {
@@ -422,9 +426,10 @@ $(document).ready(function () {
     $('#5').on('click', function () {
         console.log('level 5');
         isLevel2 = false;
+        isLevel4 = false;
+        isLevel5 = true;
         clearInterval(intervalLV3);
         updateDataPlayer(5);
-        level5()
     })
     $('#random-imgs-btn').on('click', function () {
         console.log('random images');
@@ -609,6 +614,49 @@ $(document).ready(function () {
     //level 5
     // mỗi 10s thêm 1 cặp hình bất kì vô các ô trống đã ăn
     function level5() {
+        // let countTime = 0;
+        setInterval(() => {
+            // countTime++;
+            let emptyItems = [];
+            let emptyButtons = [];
+            let arrImage = loadImage();
+            for (let i = 1; i < (arrBoard.length - 1); i++) {
+                for (let j = 1; j < (arrBoard[i].length - 1); j++) {
+                    if (arrBoard[i][j] === 0) {
+                        emptyItems.push("#btn" + i + "-" + j);
+                        emptyButtons.push({ x: i, y: j });
+                        console.log('empty' + i + '-' + j);
+                    }
+                }
+            }
+
+            if (emptyItems.length > 0) {
+                let rdIndex1 = Math.floor(Math.random() * emptyItems.length);
+                let rdIndex2 = Math.floor(Math.random() * emptyItems.length);
+                console.log(emptyItems.length);
+                console.log(rdIndex1 + ',' + rdIndex2);
+
+                let emptyItem1 = emptyItems[rdIndex1];
+                let button1 = emptyButtons[rdIndex1];
+                let emptyItem2 = emptyItems[rdIndex2];
+                let button2 = emptyButtons[rdIndex2];
+                console.log(emptyItem1);
+                console.log(emptyItem2);
+                if (rdIndex1 > -1 && rdIndex2 > -1) {
+                    emptyItems.splice(rdIndex1, 1);
+                    emptyItems.splice(rdIndex2, 1);
+                }
+                let rdImage = arrImage[Math.floor(Math.random() * arrImage.length)];
+                $(emptyItem1).removeClass("item-hidden");
+                $(emptyItem2).removeClass("item-hidden");
+                $(emptyItem1).attr("disabled",false);
+                $(emptyItem2).attr("disabled",false);
+                arrBoard[button1.x][button1.y] = 1;
+                arrBoard[button2.x][button2.y] = 1;
+                $(emptyItem1).css("background-image", "url(\"" + rdImage + "\")");
+                $(emptyItem2).css("background-image", "url(\"" + rdImage + "\")");
+            }
+        }, 10000);
 
     }
 })
