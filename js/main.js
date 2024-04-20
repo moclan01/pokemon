@@ -45,27 +45,11 @@ $(document).ready(function () {
     const arrTime = [10000, 9000, 8000, 7000, 6000, 5000];
     const arrShuffle = [30, 25, 20, 15, 15, 10];
     const arrLevel = [1, 2, 3, 4, 5, 6]
-    var disapper = false;
     var rowGameBoard = 14;
     var colGameBoard = 16;
-    let urlImage = './image/pokemon';
-    let extensionImage = '.png';
     let countDownInterval;
-
-    const title = document.getElementById('#title');
-    const scoreMain = document.getElementById('#score-main');
-    let score = document.getElementById('#score');
-    const levelMain = document.getElementById('#level-main');
-    let level = document.getElementById('#level');
-    const shuffleMain = document.getElementById('#shuffle-main');
-    let shuffle = document.getElementById('#shuffle');
-    const timeMain = document.getElementById('#time-main');
-    let time = document.getElementById('#time');
-    const board = document.getElementById('#game-board');
-    let randomImgsBtn = document.getElementById('#random-img-btn');
-    let resetGameBtn = document.getElementById('#reset-game-btn');
-    let selectLevelBtn = document.getElementById('#select-level-btn');
-
+    var intervalLV3;
+    var isLevel2 = false;
 
     //dữ liệu người chơi
     let playerData = {
@@ -90,6 +74,7 @@ $(document).ready(function () {
         $('.row-board').remove();
         createGameBoard(rowGameBoard, colGameBoard);
         handleClick();
+        //bắt đầu đếm ngược lại thời gian
         countDownTime(playerData.timeIndex);
 
         $('#level').html(playerData.currentLevel);
@@ -140,13 +125,17 @@ $(document).ready(function () {
         }
         document.querySelector(".game-board").innerHTML += boardHtml;
         // console.log(itemList.length);
+        if (isLevel2) {
+            getWall(itemList, arrBoard);
+        }
 
         while (itemList.length > 0) {
+
             randomImages(itemList, arrImage);
         }
 
-        // console.log(arrBoard[0].length);
-        // console.log(arrBoard.length);
+        console.log(arrBoard[0].length);
+        console.log(arrBoard.length);
 
         return arrBoard;
     }
@@ -194,7 +183,7 @@ $(document).ready(function () {
     handleClick();
     // xử lý sự kiện bấm
     function handleClick() {
-        $(".board-item").click(function () {
+        $(".board-item").not("wall").click(function () {
             if (selectingItem === null) {
                 $(this).addClass("selecting");
                 selectingItem = $(this)
@@ -250,7 +239,7 @@ $(document).ready(function () {
             let min = Math.min(y1, y2)
             let max = Math.max(y1, y2)
             for (let y = min + 1; y < max; y++)
-                if (arrBoard[x][y] != 0) // met another one
+                if (arrBoard[x][y] != 0)
                     return false
             return true
         }
@@ -288,8 +277,8 @@ $(document).ready(function () {
                 return false
             }
             //kiểm tra theo chiều ngang
-            //     //kiểm tra góc quẹo ở hàng
-            //     //vd: ảnh 1(1,1) -> ảnh 2(2,3): sẽ đi qua lần lượt các điểm (1,2), (1,3) (giống chữ L nằm ngang)
+            //kiểm tra góc quẹo ở hàng
+            //vd: ảnh 1(1,1) -> ảnh 2(2,3): sẽ đi qua lần lượt các điểm (1,2), (1,3) (giống chữ L nằm ngang)
             function check2LineCol(x1, y1, x2, y2) {
                 let pMinX = { x: x1, y: y1 }
                 let pMaxX = { x: x2, y: y2 }
@@ -396,11 +385,46 @@ $(document).ready(function () {
         }, 1000);
     }
 
-    $('#2').on('click', function () {
-        updateDataPlayer(2);
-    })
+
     $('#1').on('click', function () {
+        console.log('level 1');
+        isLevel2 = false;
         updateDataPlayer(1);
+        clearInterval(intervalLV3);
+    })
+    $('#2').on('click', function () {
+        console.log('level 2');
+        isLevel2 = true;
+        updateDataPlayer(2);
+        clearInterval(intervalLV3);
+        level2();
+    })
+    $('#3').on('click', function () {
+        console.log('level 3');
+        isLevel2 = false;
+        updateDataPlayer(3);
+        level3();
+    })
+    $('#4').on('click', function () {
+        console.log('level 4');
+        isLevel2 = false;
+        clearInterval(intervalLV3);
+        updateDataPlayer(4);
+        level4();
+    })
+    $('#5').on('click', function () {
+        console.log('level 5');
+        isLevel2 = false;
+        clearInterval(intervalLV3);
+        updateDataPlayer(5);
+        level5()
+    })
+    $('#6').on('click', function () {
+        console.log('level 6');
+        isLevel2 = false;
+        clearInterval(intervalLV3);
+        updateDataPlayer(6);
+        level6();
     })
     $('#random-imgs-btn').on('click', function () {
         console.log('random images');
@@ -484,21 +508,21 @@ $(document).ready(function () {
 
 
     function resetGame() {
+        // clearInterval(countDownInterval);
+
         // Đặt lại điểm số của người chơi về 0
         playerData.score = 0;
         $('#score').text(playerData.score);
 
         // Đặt lại cấp độ của người chơi về cấp độ mặc định
         $('#level').html(playerData.currentLevel);
+        clearInterval(countDownInterval);
 
         // Đặt lại thời gian của người chơi về thời gian mặc định
         $('#time').html(playerData.timeIndex);
 
         // Đặt lại số lượt trộn của người chơi về số lượt trộn mặc định
         $('#shuffle').html(playerData.shuffle);
-
-        // Dừng và đặt lại interval đếm ngược nếu đang chạy
-        clearInterval(countDownInterval);
 
         // Xóa hết các button hiện tại trên bảng game
         $('.row-board').remove();
@@ -508,9 +532,53 @@ $(document).ready(function () {
 
         handleClick();
 
-        // Bắt đầu lại đếm ngược thời gian
-        countDownTime(playerData.timeIndex);
+        // // Bắt đầu lại đếm ngược thời gian
+        // countDownTime(playerData.timeIndex);
     }
 
-    //level1
+    //level2
+    //Tạo các bức tường ở vị trí ngẫu nhiên chắn lối đi
+    function level2() {
+        resetGame();
+    }
+    // tạo tường cho level 2
+    function getWall(itemList, arrBoard) {
+        for (let j = 0; j < itemList.length; j++) {
+            if (j % 15 == 0) {
+                obj = itemList[j];
+                arrBoard[obj.x][obj.y] = 2;
+                console.log(arrBoard[obj.x][obj.y]);
+                console.log('#btn' + itemList[j].x + '-' + itemList[j].y);
+                $('#btn' + itemList[j].x + '-' + itemList[j].y).css('background-image', 'url("/image/wall.png")');
+                $('#btn' + itemList[j].x + '-' + itemList[j].y).addClass('wall');
+                $('#btn' + itemList[j].x + '-' + itemList[j].y).attr("disabled", true);
+                itemList.splice(j, 1);
+            }
+        }
+    }
+
+    //level 3
+    //cứ 30s sẽ random lại vị trí nhưng ô chưa ăn 1 lần
+    function level3() {
+        intervalLV3 = setInterval(randomPokemon, 10000);
+    }
+
+    //level 4
+    //khi ta di chuyển chuột vào vùng nào thì vùng đó sẽ sáng lên (toàn bộ bàn đều chìm vào bóng đêm)
+    //dùng opacity
+    function level4(){
+        $('.row-board').addClass('')
+    }
+
+    //level 5
+    // mỗi 10s thêm 1 cặp hình bất kì vô các ô trống đã ăn
+    function level5(){
+
+    }
+
+    //level 6
+    //
+    function level6(){
+
+    }
 })
