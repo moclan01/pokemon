@@ -363,15 +363,24 @@ $(document).ready(function () {
                 || check3LineRow(x1, y1, x2, y2, -1);
         }
 
-        if (!(x1 === x2 && y1 === y2) && arrBoard[x1][y1] == arrBoard[x2][y2]) {
-            if (x1 == x2)
-                if (check1LineRow(y1, y2, x1))
-                    return true
-            if (y1 == y2)
-                if (check1LineCol(x1, x2, y1))
-                    return true
-            return check2Line(x1, y1, x2, y2)
-                || check3Line(x1, y1, x2, y2)
+        // if (!(x1 === x2 && y1 === y2) && arrBoard[x1][y1] == arrBoard[x2][y2]) {
+        //     if (x1 === x2)
+        //         if (check1LineRow(y1, y2, x1))
+        //             return true
+        //     if (y1 === y2)
+        //         if (check1LineCol(x1, x2, y1))
+        //             return true
+        //     return check2Line(x1, y1, x2, y2)
+        //         || check3Line(x1, y1, x2, y2)
+        // }
+        if (x1 === x2 && y1 !== y2 && arrBoard[x1][y1] === arrBoard[x2][y2]) {
+            return check1LineRow(y1, y2, x1);
+        }
+        if (x1 !== x2 && y1 === y2 && arrBoard[x1][y1] === arrBoard[x2][y2]) {
+            return check1LineCol(x1, x2, y2);
+        }
+        if (x1 !== x2 && y1 !== y2 && arrBoard[x1][y1] === arrBoard[x2][y2]) {
+            return check2Line(x1, y1, x2, y2) || check3Line(x1, y1, x2, y2);
         }
         return false
     }
@@ -397,6 +406,8 @@ $(document).ready(function () {
 
     $('#1').on('click', function () {
         console.log('level 1');
+        isLevel5 = false;
+        isLevel4 = false;
         isLevel2 = false;
         updateDataPlayer(1);
         clearInterval(intervalLV3);
@@ -404,6 +415,7 @@ $(document).ready(function () {
     $('#2').on('click', function () {
         console.log('level 2');
         isLevel2 = true;
+        isLevel5 = false;
         isLevel4 = false;
         updateDataPlayer(2);
         clearInterval(intervalLV3);
@@ -412,6 +424,7 @@ $(document).ready(function () {
     $('#3').on('click', function () {
         console.log('level 3');
         isLevel2 = false;
+        isLevel5 = false;
         isLevel4 = false;
         updateDataPlayer(3);
         level3();
@@ -420,6 +433,7 @@ $(document).ready(function () {
         console.log('level 4');
         isLevel2 = false;
         isLevel4 = true;
+        isLevel5 = false;
         clearInterval(intervalLV3);
         updateDataPlayer(4);
     })
@@ -614,43 +628,40 @@ $(document).ready(function () {
     //level 5
     // mỗi 10s thêm 1 cặp hình bất kì vô các ô trống đã ăn
     function level5() {
-        // let countTime = 0;
         setInterval(() => {
-            // countTime++;
             let emptyItems = [];
             let emptyButtons = [];
             let arrImage = loadImage();
+
+            // Tìm tất cả các vị trí trống trên bảng
             for (let i = 1; i < (arrBoard.length - 1); i++) {
                 for (let j = 1; j < (arrBoard[i].length - 1); j++) {
                     if (arrBoard[i][j] === 0) {
                         emptyItems.push("#btn" + i + "-" + j);
                         emptyButtons.push({ x: i, y: j });
-                        console.log('empty' + i + '-' + j);
                     }
                 }
             }
 
-            if (emptyItems.length > 0) {
-                let rdIndex1 = Math.floor(Math.random() * emptyItems.length);
-                let rdIndex2 = Math.floor(Math.random() * emptyItems.length);
-                console.log(emptyItems.length);
-                console.log(rdIndex1 + ',' + rdIndex2);
+            // Nếu có ít nhất 2 vị trí trống
+            if (emptyItems.length >= 2) {
+                let rdIndex1, rdIndex2;
+                // Chọn ngẫu nhiên hai vị trí
+                do {
+                    rdIndex1 = Math.floor(Math.random() * emptyItems.length);
+                    rdIndex2 = Math.floor(Math.random() * emptyItems.length);
+                } while (rdIndex1 === rdIndex2); // Lặp lại cho đến khi hai chỉ số khác nhau
 
                 let emptyItem1 = emptyItems[rdIndex1];
                 let button1 = emptyButtons[rdIndex1];
                 let emptyItem2 = emptyItems[rdIndex2];
                 let button2 = emptyButtons[rdIndex2];
-                console.log(emptyItem1);
-                console.log(emptyItem2);
-                if (rdIndex1 > -1 && rdIndex2 > -1) {
-                    emptyItems.splice(rdIndex1, 1);
-                    emptyItems.splice(rdIndex2, 1);
-                }
+
                 let rdImage = arrImage[Math.floor(Math.random() * arrImage.length)];
-                $(emptyItem1).removeClass("item-hidden");
-                $(emptyItem2).removeClass("item-hidden");
-                $(emptyItem1).attr("disabled",false);
-                $(emptyItem2).attr("disabled",false);
+
+                // Hiển thị hình ảnh và cập nhật trạng thái của các ô
+                $(emptyItem1).removeClass("item-hidden").attr("disabled", false);
+                $(emptyItem2).removeClass("item-hidden").attr("disabled", false);
                 arrBoard[button1.x][button1.y] = 1;
                 arrBoard[button2.x][button2.y] = 1;
                 $(emptyItem1).css("background-image", "url(\"" + rdImage + "\")");
