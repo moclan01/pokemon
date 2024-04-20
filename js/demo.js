@@ -50,6 +50,8 @@ $(document).ready(function () {
     let countDownInterval;
     var intervalLV3;
     var isLevel2 = false;
+    var isLevel4 = false;
+    var isLevel5 = false;
 
     //dữ liệu người chơi
     let playerData = {
@@ -107,32 +109,39 @@ $(document).ready(function () {
         let arrBoard = Array.from({ length: row }, () => Array.from({ length: col }, () => 0));
         let itemList = new Array();
         let arrImage = loadImage();
-        let wallList = itemList;
 
         let boardHtml = "";
         //tạo các button chứa hình ảnh pokemon trong ma trận
-        for (let i = 1; i < arrBoard.length - 1; i++) {
-            if (i !== 0 && i !== (arrBoard.length - 1)) {
-                boardHtml += "<div class=\"row-board\">";
-                for (let j = 1; j < arrBoard[i].length - 1; j++) {
-                    if (j !== 0 && j !== (arrBoard[i].length - 1)) {
-                        arrBoard[i][j] = 1;
-                        boardHtml += "<button id='btn" + i + "-" + j + "' class=\"board-item\" x=" + i + " y=" + j + "></button>";
-                        itemList.push({ x: i, y: j });
-                    }
+        for (let i = 0; i < arrBoard.length; i++) {
+            boardHtml += "<div class=\"row-board\">";
+            for (let j = 0; j < arrBoard[i].length; j++) {
+                if (j !== 0 && j !== (arrBoard[i].length - 1) && i !== 0 && i !== (arrBoard.length - 1)) {
+                    arrBoard[i][j] = 1;
+                    boardHtml += "<button id='btn" + i + "-" + j + "' class=\"board-item\" x=" + i + " y=" + j + "></button>";
+                    itemList.push({ x: i, y: j });
+                } else if (i === 0 || i === (arrBoard.length - 1) || j === 0 || j === (arrBoard[i].length - 1)) {
+                    boardHtml += "<button id='btn" + i + "-" + j + "' class=\"empty-item\" x=" + i + " y=" + j + "></button>";
                 }
-                boardHtml += "</div>";
             }
+            boardHtml += "</div>";
+
         }
         document.querySelector(".game-board").innerHTML += boardHtml;
         // console.log(itemList.length);
-
-        while (itemList.length > 0) {
-            randomImages(itemList, arrImage);
+        if (isLevel2) {
+            getWall(itemList, arrBoard);
         }
 
-        if (isLevel2) {
-            level2();
+        if (isLevel4) {
+            level4();
+        }
+        if (isLevel5) {
+            level5();
+        }
+
+        while (itemList.length > 0) {
+
+            randomImages(itemList, arrImage);
         }
 
         console.log(arrBoard[0].length);
@@ -179,20 +188,6 @@ $(document).ready(function () {
         }
         return arrImg;
     };
-    function getWall(itemList, arrBoard) {
-        for (let j = 0; j < itemList.length; j++) {
-            if (j % 15 == 0) {
-                obj = itemList[j];
-                arrBoard[obj.x][obj.y] = 2;
-                console.log(arrBoard[obj.x][obj.y]);
-                console.log('#btn' + itemList[j].x + '-' + itemList[j].y);
-                $('#btn' + itemList[j].x + '-' + itemList[j].y).css('background-image', 'url("/image/wall.png")');
-                $('#btn' + itemList[j].x + '-' + itemList[j].y).addClass('wall');
-                $('#btn' + itemList[j].x + '-' + itemList[j].y).attr("disabled", true);
-                itemList.splice(j, 1);
-            }
-        }
-    }
 
     let arrBoard = createGameBoard(rowGameBoard, colGameBoard);
     handleClick();
@@ -211,7 +206,6 @@ $(document).ready(function () {
 
                 //kiểm tra
                 checkRoadBetweenTwoImages(selectingItem, currentItem, x1, y1, x2, y2);
-
                 $(selectingItem).removeClass("selecting");
                 selectingItem = null;
                 x1 = -1;
@@ -224,6 +218,7 @@ $(document).ready(function () {
     function checkRoadBetweenTwoImages(selectingItem, currentItem, x1, y1, x2, y2) {
         if (selectingItem.css("background-image") === currentItem.css("background-image")) {
             if (checkTwoPoint(x1, y1, x2, y2)) {
+                drawPathAndAnimate(x1, y1, x2, y2);
                 $(selectingItem).addClass("item-hidden");
                 $(selectingItem).attr("disabled", true);
                 $(currentItem).addClass("item-hidden");
@@ -370,16 +365,43 @@ $(document).ready(function () {
         }
 
         if (!(x1 === x2 && y1 === y2) && arrBoard[x1][y1] == arrBoard[x2][y2]) {
-            if (x1 == x2)
+            if (x1 === x2)
                 if (check1LineRow(y1, y2, x1))
                     return true
-            if (y1 == y2)
+            if (y1 === y2)
                 if (check1LineCol(x1, x2, y1))
                     return true
             return check2Line(x1, y1, x2, y2)
                 || check3Line(x1, y1, x2, y2)
         }
+
         return false
+    }
+    function drawPathAndAnimate(x1, y1, x2, y2) {
+        // Thêm CSS để hiển thị đường đi
+        let path = $("<div>").addClass("path");
+        $("body").append(path);
+        let offset1 = $(`.board-item[x=${x1}][y=${y1}]`).offset();
+        let offset2 = $(`.board-item[x=${x2}][y=${y2}]`).offset();
+        let width = Math.abs(offset1.left - offset2.left) + $(".board-item").outerWidth();
+        let height = Math.abs(offset1.top - offset2.top) + $(".board-item").outerHeight();
+        let top = Math.min(offset1.top, offset2.top);
+        let left = Math.min(offset1.left, offset2.left);
+        path.css({
+            width: width + "px",
+            height: height + "px",
+            top: top + "px",
+            left: left + "px"
+        });
+
+        // Ẩn và xóa các ô đã ăn
+        $(`.board-item[x=${x1}][y=${y1}], .board-item[x=${x2}][y=${y2}]`).addClass("item-hidden");
+        arrBoard[x1][y1] = 0;
+        arrBoard[x2][y2] = 0;
+
+        // Cập nhật điểm số và hiển thị trên giao diện
+        playerData.score += 50;
+        $("#score").text(playerData.score);
     }
 
     // Đếm ngược thời gian
@@ -403,6 +425,8 @@ $(document).ready(function () {
 
     $('#1').on('click', function () {
         console.log('level 1');
+        isLevel5 = false;
+        isLevel4 = false;
         isLevel2 = false;
         updateDataPlayer(1);
         clearInterval(intervalLV3);
@@ -410,6 +434,8 @@ $(document).ready(function () {
     $('#2').on('click', function () {
         console.log('level 2');
         isLevel2 = true;
+        isLevel5 = false;
+        isLevel4 = false;
         updateDataPlayer(2);
         clearInterval(intervalLV3);
         level2();
@@ -417,22 +443,26 @@ $(document).ready(function () {
     $('#3').on('click', function () {
         console.log('level 3');
         isLevel2 = false;
+        isLevel5 = false;
+        isLevel4 = false;
         updateDataPlayer(3);
         level3();
     })
     $('#4').on('click', function () {
         console.log('level 4');
         isLevel2 = false;
+        isLevel4 = true;
+        isLevel5 = false;
         clearInterval(intervalLV3);
         updateDataPlayer(4);
-        level4();
     })
     $('#5').on('click', function () {
         console.log('level 5');
         isLevel2 = false;
+        isLevel4 = false;
+        isLevel5 = true;
         clearInterval(intervalLV3);
         updateDataPlayer(5);
-        level5()
     })
     $('#random-imgs-btn').on('click', function () {
         console.log('random images');
@@ -544,6 +574,12 @@ $(document).ready(function () {
         // countDownTime(playerData.timeIndex);
     }
 
+    //level2
+    //Tạo các bức tường ở vị trí ngẫu nhiên chắn lối đi
+    function level2() {
+        resetGame();
+    }
+    // tạo tường cho level 2
     function getWall(itemList, arrBoard) {
         for (let j = 0; j < itemList.length; j++) {
             if (j % 15 == 0) {
@@ -558,20 +594,6 @@ $(document).ready(function () {
             }
         }
     }
-
-    //level2
-    //Tạo các bức tường ở vị trí ngẫu nhiên chắn lối đi
-    function level2() {
-        // resetGame();
-        let wallList = [];
-        for (let i = 1; i < (arrBoard.length - 1); i++) {
-            for (let j = 1; j < (arrBoard[i].length - 1); j++) { 
-                wallList.push({x:i,y:j});
-            }
-        }
-        getWall(wallList,arrBoard);
-    }
-
 
     //level 3
     //cứ 30s sẽ random lại vị trí nhưng ô chưa ăn 1 lần
@@ -667,5 +689,4 @@ $(document).ready(function () {
         }, 10000);
 
     }
-
 })

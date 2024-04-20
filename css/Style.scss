@@ -11,6 +11,7 @@ image {
 
 .container {
   width: 1200px;
+
   .title {
     background-color: rgb(235, 133, 0);
 
@@ -31,10 +32,12 @@ image {
     display: flex;
     width: 1200px;
     margin-top: 32px;
+
     .action-game {
       flex: 1;
       display: flex;
       flex-direction: column;
+
       .action-button {
         width: 100%;
         height: 36px;
@@ -42,25 +45,37 @@ image {
         border-radius: 5px;
         background-color: aliceblue;
         margin: 16px 0;
-        &:hover{
+
+        &:hover {
           background-color: aqua;
         }
       }
     }
 
-    .game-board{
+    .game-board {
       flex: 3;
-      margin: 0 32px;
+      margin: 0 8px;
+
       .row-board {
         display: flex;
-  
+
         .board-item {
           width: 48px;
           height: 48px;
           margin: 0;
           padding: 0;
         }
-  
+
+        .empty-item {
+          width: 48px;
+          height: 48px;
+          margin: 0;
+          padding: 0;
+          background-color: transparent;
+          background-image: none !important;
+          border: none;
+        }
+
         .item-hidden {
           background-color: transparent;
           background-image: none !important;
@@ -70,49 +85,9 @@ image {
       }
     }
 
-    .game-instruction{
+    .game-instruction {
       flex: 2;
       background-color: bisque;
     }
   }
-}
-
-.title {
-  background-color: rgb(235, 133, 0);
-
-  .infor {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-
-    .score {}
-
-    .shuffle {}
-
-    .time {}
-  }
-
-  .game-board {
-    .row-board {
-      display: flex;
-
-      .board-item {
-        width: 48px;
-        height: 48px;
-        margin: 0;
-        padding: 0;
-      }
-
-      .item-hidden {
-        background-color: transparent;
-        background-image: none !important;
-        border: none;
-        padding: 2px;
-      }
-    }
-
-
-  }
-
-
 }
