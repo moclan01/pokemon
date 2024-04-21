@@ -50,7 +50,6 @@ $(document).ready(function () {
     var intervalLV3;
     var isLevel2 = false;
     var isLevel4 = false;
-    var isLevel5 = false;
     var intervalLevel5
     var shuffle;
 
@@ -115,12 +114,6 @@ $(document).ready(function () {
         // Đặt lại số lượt trộn của người chơi về số lượt trộn mặc định
         $('#shuffle').html(playerData.shuffle);
         shuffle = playerData.shuffle;
-
-        // // Dừng và đặt lại interval đếm ngược nếu đang chạy
-        // clearInterval(countDownInterval);
-
-        // // Bắt đầu lại đếm ngược thời gian
-        // countDownTime(playerData.timeIndex);
 
         let arrBoard = Array.from({ length: row }, () => Array.from({ length: col }, () => 0));
         let itemList = new Array();
@@ -258,7 +251,7 @@ $(document).ready(function () {
     }
     // //lựa chọn sai sẽ bị trừ điểm và thời gian
     function chooseFalse() {
-
+        
     }
 
     let selectingItem = null
@@ -402,6 +395,7 @@ $(document).ready(function () {
 
     // Đếm ngược thời gian
     function countDownTime(timeCountDown) {
+        clearInterval(countDownInterval);
         // console.log("CountDown");
         let time;
         time = parseInt(timeCountDown);
@@ -413,7 +407,7 @@ $(document).ready(function () {
             if (time < 0) {
                 console.log("hết giờ");
                 $('#time').html('hết giờ');
-                clearInterval(countDownInterval);
+                // clearInterval(countDownInterval);
             }
         }, 1000);
     }
@@ -438,6 +432,7 @@ $(document).ready(function () {
         clearInterval(intervalLV3);
         clearInterval(intervalLevel5);
         updateDataPlayer(1);
+        countDownTime(1000);
     })
     $('#2').on('click', function () {
         resetPreviousLevelState();
@@ -449,6 +444,7 @@ $(document).ready(function () {
         clearInterval(intervalLevel5);
         level2();
         updateDataPlayer(2);
+        countDownTime(1000);
     })
     $('#3').on('click', function () {
         resetPreviousLevelState();
@@ -459,6 +455,7 @@ $(document).ready(function () {
         level3();
         clearInterval(intervalLevel5);
         updateDataPlayer(3);
+        countDownTime(1000);
     })
     $('#4').on('click', function () {
         resetPreviousLevelState();
@@ -469,6 +466,7 @@ $(document).ready(function () {
         clearInterval(intervalLV3);
         clearInterval(intervalLevel5);
         updateDataPlayer(4);
+        countDownTime(1000);
     })
     $('#5').on('click', function () {
         resetPreviousLevelState();
@@ -478,6 +476,7 @@ $(document).ready(function () {
         clearInterval(intervalLV3);
         level5();
         updateDataPlayer(5);
+        countDownTime(1000);
     })
     $('#random-imgs-btn').on('click', function () {
         console.log('random images');
@@ -493,6 +492,7 @@ $(document).ready(function () {
     $('#reset-game-btn').on('click', function () {
         console.log('reset game')
         resetGame();
+        countDownTime(1000)
     })
 
     // function createLevel(level) {
@@ -573,7 +573,6 @@ $(document).ready(function () {
 
 
     function resetGame() {
-        // clearInterval(countDownInterval);
 
         // Đặt lại điểm số của người chơi về 0
         playerData.score = 0;
@@ -620,7 +619,7 @@ $(document).ready(function () {
                 arrBoard[obj.x][obj.y] = 2;
                 console.log(arrBoard[obj.x][obj.y]);
                 let btnId = '#btn' + obj.x + '-' + obj.y;
-                $(btnId).css('background-image', 'url("/image/wall.png")'); // Đặt hình nền cho button
+                $(btnId).css('background-image', 'url("./image/wall.png")'); // Đặt hình nền cho button
                 $(btnId).addClass('wall'); // Thêm lớp 'wall' cho button
                 $(btnId).attr("disabled", true); // Vô hiệu hóa button
                 itemList.splice(j, 1);

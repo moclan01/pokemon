@@ -52,6 +52,10 @@ image {
   height: 48px;
   margin: 0;
   padding: 0;
+  transition: opacity;
+}
+.container .main .game-board .row-board .selecting {
+  opacity: 0.7;
 }
 .container .main .game-board .row-board .empty-item {
   width: 48px;
