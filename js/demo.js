@@ -129,7 +129,7 @@ $(document).ready(function () {
         document.querySelector(".game-board").innerHTML += boardHtml;
         // console.log(itemList.length);
         if (isLevel2) {
-            getWall(itemList, arrBoard);
+            level2();
         }
 
         if (isLevel4) {
@@ -577,7 +577,12 @@ $(document).ready(function () {
     //level2
     //Tạo các bức tường ở vị trí ngẫu nhiên chắn lối đi
     function level2() {
-        resetGame();
+        for (let i = 1; i < (arrBoard.length - 1); i++) {
+            for (let j = 1; j < (arrBoard[i].length - 1); j++) {
+                wallList.push({ x: i, y: j });
+            }
+        }
+        getWall(wallList, arrBoard);
     }
     // tạo tường cho level 2
     function getWall(itemList, arrBoard) {

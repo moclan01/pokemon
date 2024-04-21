@@ -9,7 +9,7 @@ image {
 }
 
 .container {
-  width: 1200px;
+  width: 1400px;
 }
 .container .title {
   background-color: rgb(235, 133, 0);
@@ -71,6 +71,21 @@ image {
 .container .main .game-instruction {
   flex: 2;
   background-color: bisque;
+}
+
+.content .level1,
+.content .level2,
+.content .level3,
+.content .level4,
+.content .level5 {
+  display: none;
+}
+.content .level1.active,
+.content .level2.active,
+.content .level3.active,
+.content .level4.active,
+.content .level5.active {
+  display: block;
 }
 
 /*# sourceMappingURL=Style.css.map */

@@ -6,56 +6,59 @@
 $(document).ready(function () {
 
     const images = [
-        "/image/pokemon0.png",
-        "/image/pokemon1.png",
-        "/image/pokemon2.png",
-        "/image/pokemon3.png",
-        "/image/pokemon4.png",
-        "/image/pokemon5.png",
-        "/image/pokemon6.png",
-        "/image/pokemon7.png",
-        "/image/pokemon8.png",
-        "/image/pokemon9.png",
-        "/image/pokemon10.png",
-        "/image/pokemon11.png",
-        "/image/pokemon12.png",
-        "/image/pokemon13.png",
-        "/image/pokemon14.png",
-        "/image/pokemon15.png",
-        "/image/pokemon16.png",
-        "/image/pokemon17.png",
-        "/image/pokemon18.png",
-        "/image/pokemon19.png",
-        "/image/pokemon20.png",
-        "/image/pokemon21.png",
-        "/image/pokemon22.png",
-        "/image/pokemon23.png",
-        "/image/pokemon24.png",
-        "/image/pokemon25.png",
-        "/image/pokemon26.png",
-        "/image/pokemon27.png",
-        "/image/pokemon28.png",
-        "/image/pokemon29.png",
-        "/image/pokemon30.png",
-        "/image/pokemon31.png",
-        "/image/pokemon32.png"
+        "./image/pokemon0.png",
+        "./image/pokemon1.png",
+        "./image/pokemon2.png",
+        "./image/pokemon3.png",
+        "./image/pokemon4.png",
+        "./image/pokemon5.png",
+        "./image/pokemon6.png",
+        "./image/pokemon7.png",
+        "./image/pokemon8.png",
+        "./image/pokemon9.png",
+        "./image/pokemon10.png",
+        "./image/pokemon11.png",
+        "./image/pokemon12.png",
+        "./image/pokemon13.png",
+        "./image/pokemon14.png",
+        "./image/pokemon15.png",
+        "./image/pokemon16.png",
+        "./image/pokemon17.png",
+        "./image/pokemon18.png",
+        "./image/pokemon19.png",
+        "./image/pokemon20.png",
+        "./image/pokemon21.png",
+        "./image/pokemon22.png",
+        "./image/pokemon23.png",
+        "./image/pokemon24.png",
+        "./image/pokemon25.png",
+        "./image/pokemon26.png",
+        "./image/pokemon27.png",
+        "./image/pokemon28.png",
+        "./image/pokemon29.png",
+        "./image/pokemon30.png",
+        "./image/pokemon31.png",
+        "./image/pokemon32.png"
     ];
 
 
-    const arrTime = [10000, 9000, 8000, 7000, 6000, 5000];
     const arrShuffle = [30, 25, 20, 15, 15, 10];
     const arrLevel = [1, 2, 3, 4, 5, 6]
     var rowGameBoard = 14;
-    var colGameBoard = 16;
-    let countDownInterval;
+    var colGameBoard = 18;
+    var countDownInterval;
     var intervalLV3;
     var isLevel2 = false;
+    var isLevel4 = false;
+    var isLevel5 = false;
+    var intervalLevel5
+    var shuffle;
 
     //dữ liệu người chơi
     let playerData = {
         score: 0,
         currentLevel: arrLevel[0],
-        timeIndex: arrTime[0],
+        timeIndex: 1000,
         win: false,
         shuffle: arrShuffle[0]
     };
@@ -63,23 +66,37 @@ $(document).ready(function () {
 
     //setup lại dữ liệu người chơi khi chọn level
     function updateDataPlayer(level) {
-        // console.log("Update");
-        playerData.score = 0;
+        console.log("Update");
         playerData.win = false;
         playerData.currentLevel = arrLevel[level - 1];
 
-        playerData.timeIndex = arrTime[level - 1];
         playerData.shuffle = arrShuffle[level - 1];
-        clearInterval(countDownInterval);
-        $('.row-board').remove();
-        createGameBoard(rowGameBoard, colGameBoard);
-        handleClick();
-        //bắt đầu đếm ngược lại thời gian
-        countDownTime(playerData.timeIndex);
+        shuffle = playerData.shuffle;
+
+        resetPreviousLevelState();
 
         $('#level').html(playerData.currentLevel);
         $('#shuffle').html(playerData.shuffle);
         $('#time').html(playerData.timeIndex);
+
+    }
+
+    //xóa trạng thái của level cũ
+    function resetPreviousLevelState() {
+        // Xóa tất cả các hình ảnh đã được chọn
+        $(".board-item").removeClass("selecting").removeClass("item-hidden").removeAttr("disabled");
+
+        // Xóa điểm số
+        playerData.score = 0;
+        $("#score").text(playerData.score);
+        shuffle = playerData.shuffle;
+
+        // Đặt lại thời gian còn lại 
+
+        // Reset thời gian còn lại trên giao diện (nếu có)
+        $('#game-board').empty();
+        arrBoard = createGameBoard(rowGameBoard, colGameBoard);
+        handleClick();
 
     }
 
@@ -97,17 +114,17 @@ $(document).ready(function () {
 
         // Đặt lại số lượt trộn của người chơi về số lượt trộn mặc định
         $('#shuffle').html(playerData.shuffle);
+        shuffle = playerData.shuffle;
 
-        // Dừng và đặt lại interval đếm ngược nếu đang chạy
-        clearInterval(countDownInterval);
+        // // Dừng và đặt lại interval đếm ngược nếu đang chạy
+        // clearInterval(countDownInterval);
 
-        // Bắt đầu lại đếm ngược thời gian
-        countDownTime(playerData.timeIndex);
+        // // Bắt đầu lại đếm ngược thời gian
+        // countDownTime(playerData.timeIndex);
 
         let arrBoard = Array.from({ length: row }, () => Array.from({ length: col }, () => 0));
         let itemList = new Array();
         let arrImage = loadImage();
-        let wallList = itemList;
 
         let boardHtml = "";
         //tạo các button chứa hình ảnh pokemon trong ma trận
@@ -124,16 +141,24 @@ $(document).ready(function () {
                 boardHtml += "</div>";
             }
         }
+
         document.querySelector(".game-board").innerHTML += boardHtml;
         // console.log(itemList.length);
+        if (isLevel2) {
+            getWall(itemList, arrBoard);
+        }
 
         while (itemList.length > 0) {
             randomImages(itemList, arrImage);
         }
 
-        if (isLevel2) {
-            level2();
+
+        if (isLevel4) {
+            level4();
         }
+        // if (isLevel5) {
+        //     level5();
+        // }
 
         console.log(arrBoard[0].length);
         console.log(arrBoard.length);
@@ -179,23 +204,11 @@ $(document).ready(function () {
         }
         return arrImg;
     };
-    function getWall(itemList, arrBoard) {
-        for (let j = 0; j < itemList.length; j++) {
-            if (j % 15 == 0) {
-                obj = itemList[j];
-                arrBoard[obj.x][obj.y] = 2;
-                console.log(arrBoard[obj.x][obj.y]);
-                console.log('#btn' + itemList[j].x + '-' + itemList[j].y);
-                $('#btn' + itemList[j].x + '-' + itemList[j].y).css('background-image', 'url("/image/wall.png")');
-                $('#btn' + itemList[j].x + '-' + itemList[j].y).addClass('wall');
-                $('#btn' + itemList[j].x + '-' + itemList[j].y).attr("disabled", true);
-                itemList.splice(j, 1);
-            }
-        }
-    }
+
 
     let arrBoard = createGameBoard(rowGameBoard, colGameBoard);
     handleClick();
+
     // xử lý sự kiện bấm
     function handleClick() {
         $(".board-item").not("wall").click(function () {
@@ -216,10 +229,15 @@ $(document).ready(function () {
                 selectingItem = null;
                 x1 = -1;
                 y1 = -1;
-
+                if (checkWin()) {
+                    alert('Bạn đã chiến thắng!');
+                }
             }
+
         })
+
     }
+
     // //kiểm tra đường ăn giữa 2 hình
     function checkRoadBetweenTwoImages(selectingItem, currentItem, x1, y1, x2, y2) {
         if (selectingItem.css("background-image") === currentItem.css("background-image")) {
@@ -400,43 +418,77 @@ $(document).ready(function () {
         }, 1000);
     }
 
+    // $('.level-btn').on('click', function () {
+    //     let level = $(this).attr('id');
+    //     switch (level) {
+    //         case '1':
 
+    //             break;
+
+    //         default:
+    //             break;
+    //     }
+    // })
     $('#1').on('click', function () {
+        resetPreviousLevelState();
         console.log('level 1');
+        isLevel5 = false;
+        isLevel4 = false;
         isLevel2 = false;
-        updateDataPlayer(1);
         clearInterval(intervalLV3);
+        clearInterval(intervalLevel5);
+        updateDataPlayer(1);
     })
     $('#2').on('click', function () {
+        resetPreviousLevelState();
         console.log('level 2');
         isLevel2 = true;
-        updateDataPlayer(2);
+        isLevel5 = false;
+        isLevel4 = false;
         clearInterval(intervalLV3);
+        clearInterval(intervalLevel5);
         level2();
+        updateDataPlayer(2);
     })
     $('#3').on('click', function () {
+        resetPreviousLevelState();
         console.log('level 3');
         isLevel2 = false;
-        updateDataPlayer(3);
+        isLevel5 = false;
+        isLevel4 = false;
         level3();
+        clearInterval(intervalLevel5);
+        updateDataPlayer(3);
     })
     $('#4').on('click', function () {
+        resetPreviousLevelState();
         console.log('level 4');
         isLevel2 = false;
+        isLevel4 = true;
+        isLevel5 = false;
         clearInterval(intervalLV3);
+        clearInterval(intervalLevel5);
         updateDataPlayer(4);
-        level4();
     })
     $('#5').on('click', function () {
+        resetPreviousLevelState();
         console.log('level 5');
         isLevel2 = false;
+        isLevel4 = false;
         clearInterval(intervalLV3);
+        level5();
         updateDataPlayer(5);
-        level5()
     })
     $('#random-imgs-btn').on('click', function () {
         console.log('random images');
-        randomPokemon();
+        if (shuffle > 0) {
+            shuffle -= 1;
+            $('#shuffle').html(shuffle);
+            randomPokemon();
+            console.log(shuffle);
+        } else {
+            alert('bạn đã hết lượt đổi');
+        }
     })
     $('#reset-game-btn').on('click', function () {
         console.log('reset game')
@@ -455,6 +507,7 @@ $(document).ready(function () {
         //add ảnh hiện tại chưa ăn vào 1 list
         let ImgExists = [];
         let locationBtnExist = []
+        let wallList = [];
         for (let i = 0; i < arrBoard.length; i++) {
             for (let j = 0; j < arrBoard[i].length - 1; j++) {
                 if (arrBoard[i][j] === 1) {
@@ -464,6 +517,10 @@ $(document).ready(function () {
                     ImgExists.push($(`#btn${i}-${j}`).css("background-image"));
                 }
             }
+        }
+
+        for (let x = 0; x < locationBtnExist.length; x++) {
+            console.log(locationBtnExist[x]);
         }
 
         //tách các url thành dạng /image/pokemonx.png
@@ -485,8 +542,8 @@ $(document).ready(function () {
         }
 
         for (let i = 0; i < locationBtnExist.length; i++) {
-            console.log(locationBtnExist[i]);
-            console.log(urlImage[i]);
+            // console.log(locationBtnExist[i]);
+            // console.log(urlImage[i]);
         }
     }
 
@@ -537,23 +594,35 @@ $(document).ready(function () {
 
         // Tạo lại bảng game với kích thước và trạng thái ban đầu
         arrBoard = createGameBoard(rowGameBoard, colGameBoard);
-
+        shuffle = playerData.shuffle;
         handleClick();
+
 
         // // Bắt đầu lại đếm ngược thời gian
         // countDownTime(playerData.timeIndex);
     }
 
+    function checkWin() {
+        for (let i = 0; i < arrBoard.length; i++) {
+            for (let j = 0; j < arrBoard[i].length; j++) {
+                if (arrBoard[i][j] !== 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     function getWall(itemList, arrBoard) {
         for (let j = 0; j < itemList.length; j++) {
-            if (j % 15 == 0) {
-                obj = itemList[j];
+            if (j % 10 == 0) {
+                let obj = itemList[j];
                 arrBoard[obj.x][obj.y] = 2;
                 console.log(arrBoard[obj.x][obj.y]);
-                console.log('#btn' + itemList[j].x + '-' + itemList[j].y);
-                $('#btn' + itemList[j].x + '-' + itemList[j].y).css('background-image', 'url("/image/wall.png")');
-                $('#btn' + itemList[j].x + '-' + itemList[j].y).addClass('wall');
-                $('#btn' + itemList[j].x + '-' + itemList[j].y).attr("disabled", true);
+                let btnId = '#btn' + obj.x + '-' + obj.y;
+                $(btnId).css('background-image', 'url("/image/wall.png")'); // Đặt hình nền cho button
+                $(btnId).addClass('wall'); // Thêm lớp 'wall' cho button
+                $(btnId).attr("disabled", true); // Vô hiệu hóa button
                 itemList.splice(j, 1);
             }
         }
@@ -562,14 +631,14 @@ $(document).ready(function () {
     //level2
     //Tạo các bức tường ở vị trí ngẫu nhiên chắn lối đi
     function level2() {
-        // resetGame();
         let wallList = [];
         for (let i = 1; i < (arrBoard.length - 1); i++) {
-            for (let j = 1; j < (arrBoard[i].length - 1); j++) { 
-                wallList.push({x:i,y:j});
+            for (let j = 1; j < (arrBoard[i].length - 1); j++) {
+                wallList.push({ x: i, y: j });
             }
         }
-        getWall(wallList,arrBoard);
+
+        resetGame();
     }
 
 
@@ -613,7 +682,7 @@ $(document).ready(function () {
                                 neighborId % colGameBoard !== 0 &&
                                 (neighborId + 1) % colGameBoard !== 0
                             ) {
-                                $(`#btn${i + k}-${j + l}`).css("opacity", "0");
+                                $(`#btn${i + k}-${j + l}`).css("opacity", "0.5");
                             }
                         }
                     }
@@ -625,7 +694,7 @@ $(document).ready(function () {
     //level 5
     // mỗi 10s thêm 1 cặp hình bất kì vô các ô trống đã ăn
     function level5() {
-        setInterval(() => {
+        intervalLevel5 = setInterval(() => {
             let emptyItems = [];
             let emptyButtons = [];
             let arrImage = loadImage();
@@ -664,7 +733,7 @@ $(document).ready(function () {
                 $(emptyItem1).css("background-image", "url(\"" + rdImage + "\")");
                 $(emptyItem2).css("background-image", "url(\"" + rdImage + "\")");
             }
-        }, 10000);
+        }, 30000);
 
     }
 

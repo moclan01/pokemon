@@ -10,7 +10,7 @@ image {
 
 
 .container {
-  width: 1200px;
+  width: 1400px;
 
   .title {
     background-color: rgb(235, 133, 0);
@@ -88,6 +88,21 @@ image {
     .game-instruction {
       flex: 2;
       background-color: bisque;
+    }
+  }
+}
+
+.content {
+
+  .level1,
+  .level2,
+  .level3,
+  .level4,
+  .level5 {
+    display: none;
+
+    &.active {
+      display: block;
     }
   }
 }
