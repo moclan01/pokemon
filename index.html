@@ -10,142 +10,178 @@
 </head>
 
 <body>
-    <div class="container">
-        <!-- Title game -->
-        <div id="title" class="title">
-            <h1>Pikachu</h1>
-            <div class="infor">
-                <div id="score-main" class="score">
-                    Điểm: <span id="score"></span>
+    <div class="game-pikachu">
+        <div class="container">
+            <!-- Title game -->
+            <div id="title" class="title">
+                <div class="name-game">
+                    <strong>PIKACHU</strong>
                 </div>
-                <div id="level-main" class="level">
-                    Level: <span id="level"></span>
+                <div class="infor">
+                    <div id="shuffle-main" class="shuffle">
+                        Lượt đổi: <span id="shuffle"></span>
+                    </div>
+                    <div id="time-main" class="time">
+                        Thời gian: <span id="time"></span>
+                    </div>
                 </div>
-                <div id="shuffle-main" class="shuffle">
-                    Lượt đổi: <span id="shuffle"></span>
+            </div>
+            <!-- Main game -->
+            <div class="main">
+                <div class="action-game">
+                    <div class="image-pikachu">
+                        <img class="image" src="./image/others/pikachu.jpg">
+                    </div>
+                    <div id="score-main" class="score">
+                        <strong>Điểm: <span id="score"></span></strong>
+                    </div>
+                    <div id="level-main" class="level">
+                        <strong>Level: <span id="level"></span></strong>
+                    </div>
+                    <button class="action-button" id="random-imgs-btn">
+                        Đổi lại
+                    </button>
+                    <button class="action-button" id="reset-game-btn">
+                        Chơi lại
+                    </button>
+                    <button class="action-button" id="select-level-btn">
+                        Level
+                    </button>
+                    <button class="action-button" id="about-me-btn">
+                        Về tôi
+                    </button>
                 </div>
-                <div id="time-main" class="time">
-                    Thời gian: <span id="time"></span>
+                <div id="game-board" class="game-board">
+                </div>
+                <div class="game-instruction">
+                    <h2>Hướng dẫn trò chơi</h2>
+                    <div id="game-instruction-content">
+
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- Main game -->
-        <div class="main">
-            <div class="action-game">
-                <button class="action-button" id="random-imgs-btn">
-                    Đổi lại
-                </button>
-                <button class="action-button" id="reset-game-btn">
-                    Chơi lại
-                </button>
-                <button class="action-button" id="select-level-btn">
-                    Level
-                </button>
+
+
+        <!--Level Modal-->
+        <div id="level-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" id="level-modal-close-btn">&times;</span>
+                    <h2>Chọn level</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-dialog-content">
+                        <button id="1" class="level-btn">
+                            Level 1
+                        </button>
+                        <button id="2" class="level-btn">
+                            Level 2
+                        </button>
+                        <button id="3" class="level-btn">
+                            Level 3
+                        </button>
+                        <button id="4" class="level-btn">
+                            Level 4
+                        </button>
+                        <button id="5" class="level-btn">
+                            Level 5
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div id="game-board" class="game-board">
+        </div>
+
+        <!--Level Modal-->
+        <div id="about-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" id="about-modal-close-btn">&times;</span>
+                    <h2>Thông tin sinh viên</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="student">
+                        <p><strong>Họ tên: </strong>Nguyễn Bính</p>
+                        <p><strong>MSSV: </strong>21130286</p>
+                        <p><strong>Quê quán: </strong>Đăk Lăk</p>
+                        <p><strong>Tình trạng hôn nhân: </strong>Độc thân</p>
+                        <p><strong>Sức khỏe sinh sản: </strong>Tốt</p>
+                    </div>
+                </div>
             </div>
-            <div class="game-instruction">
-                <h2>Hướng dẫn trò chơi</h2>
-                <div class="game-instruction-content" id="game-instruction-content">
+        </div>
+
+
+        <!-- Game instructions -->
+        <div class="content">
+            <div class="level1">
+                <h2>Level 1</h2>
+                <ol>
+                    <li>Chào mừng bạn đến với Pikachu - Một trò chơi giải đố kinh điển. Bạn sẽ thấy màn
+                    hình hiển thị một lười các biểu tượng pokemon.</li>
+               
+                    <li>Nhiệm vụ của trò chơi là tìm những cặp pokemon giống nhau và kết nối chúng.</li>
                     
-                </div>
+                    <li>Bạn cần phải chọn vào 2 ô pokemon có hình giống nhau và làm biến mất nó với điều
+                    kiện không có pokemon nào chắn trên đường đi của chúng.</li>
+                  
+                    <li>Đường đi giữa 2 ô pokemon giống nhau có thể là hàng dọc, hàng ngang, theo hình chữ L,
+                    chữ U hoặc chữ Z.</li>
+               
+                    <li>Trò chơi kết thúc khi tất cả các cặp pokemon được loại bỏ hoặc hết thời gian.</li>
+                  
+                    <li>Chúc bạn chơi vui vẻ!</li>
+                </ol>
+            </div>
+            <div class="level2">
+                <h2>Level 2</h2>
+                <p>
+                    1.Ở level này sẽ xuất hiện thêm các tường chắn.
+                    <br>
+                    2.Các tường chắn sẽ chặn lối đi của bạn.
+                    <br>
+                    3.Bạn cần tìm các đường đi khác mà không xuyên qua tường chắn.
+                    <br>
+                    4.Chúc bạn chơi vui vẻ!
+                </p>
+            </div>
+            <div class="level3">
+                <h2>Level 3</h2>
+                <p>
+                    1.Ở level này, cứ 15s sẽ random lại vị trí các ô.
+                    <br>
+                    2.Bạn cần phải nhanh tay lẹ mặt trước khi các vị trí bị đảo.
+                    <br>
+                    3. Chúc bạn chơi vui vẻ!
+                </p>
+            </div>
+            <div class="level4">
+                <h2>Level 4</h2>
+                <p>
+                    1.Ở level này, bạn phải có trí nhớ tốt.
+                    <br>
+                    2.Khi bạn di chuyển con chuột lần đầu đến các ô thì sẽ bị ẩn đi và nó sẽ hiện 1 vùng
+                    gồm 9 ô bao quanh con trỏ chuột ở lần thứ 2 trở đi khi di chuyển đến.
+                    <br>
+                    3.Chúc bạn chơi vui vẻ!
+                </p>
+            </div>
+            <div class="level5">
+                <h2>Level 5</h2>
+                <p>
+                    1.Ở level này, bạn sẽ phải đối mặt với một thử thách: mỗi 30 giây sẽ có thêm một cặp hình Pokemon
+                    mới xuất hiện trên màn hình.
+                    <br>
+                    2.Bạn phải thể hiện sự nhanh nhẹn và sự tập trung cao độ để đối phó với thời gian giới hạn và số
+                    lượng hình ngày càng tăng.
+                    <br>
+                    3.Chúc bạn chơi vui vẻ!
+                </p>
             </div>
         </div>
+
     </div>
 
-    <!-- Level game -->
-    <div class="select-level">
-        <div class="modal-dialog" id="modal-dialog">
-            <h2>Chọn level</h2>
-            <div class="modal-dialog-content">
-                <button id="1" class="level-btn">
-                    Level 1
-                </button>
-                <button id="2" class="level-btn">
-                    Level 2
-                </button>
-                <button id="3" class="level-btn">
-                    Level 3
-                </button>
-                <button id="4" class="level-btn">
-                    Level 4
-                </button>
-                <button id="5" class="level-btn">
-                    Level 5
-                </button>
-            </div>
-        </div>
-    </div>
-    <!-- Game instructions -->
-    <div class="content">
-        <div class="level1">
-            <h2>Level 1</h2>
-            <p>
-                1.Chào mừng bạn đến với Pikachu - Một trò chơi giải đố kinh điển. Bạn sẽ thấy màn hình hiển thị một lười các biểu tượng pokemon.
-                <br>
-                2.Nhiệm vụ của trò chơi là tìm những cặp pokemon giống nhau và kết nối chúng.
-                <br>
-                3.Bạn cần phải chọn vào 2 ô pokemon có hình giống nhau và làm biến mất nó với điều kiện không có pokemon nào chắn trên đường đi của chúng.
-                <br>
-                4.Đường đi giữa 2 ô pokemon giống nhau có thể là hàng dọc, hàng ngang, theo hình chữ L, chữ U hoặc chữ Z.
-                <br>
-                5.Trò chơi kết thúc khi tất cả các cặp pokemon được loại bỏ hoặc hết thời gian.
-                <br>
-                6.Chúc bạn chơi vui vẻ! 
-            </p>
-        </div>
-        <div class="level2">
-            <h2>Level 2</h2>
-            <p>
-                1.Ở level này sẽ xuất hiện thêm các tường chắn.
-                <br>
-                2.Các tường chắn sẽ chặn lối đi của bạn.
-                <br>
-                3.Bạn cần tìm các đường đi khác mà không xuyên qua tường chắn.
-                <br>
-                4.Chúc bạn chơi vui vẻ!
-            </p>
-        </div>
-        <div class="level3">
-            <h2>Level 3</h2>
-            <p>
-                1.Ở level này, cứ 15s sẽ random lại vị trí các ô.
-                <br>
-                2.Bạn cần phải nhanh tay lẹ mặt trước khi các vị trí bị đảo.
-                <br>
-                3. Chúc bạn chơi vui vẻ!
-            </p>
-        </div>
-        <div class="level4">
-            <h2>Level 4</h2>
-            <p>
-                1.Ở level này, bạn phải có trí nhớ tốt.
-                <br>
-                2.Khi bạn di chuyển con chuột lần đầu đến các ô thì sẽ bị ẩn đi và nó sẽ hiện 1 vùng gồm 9 ô bao quanh con trỏ chuột ở lần thứ 2 trở đi khi di chuyển đến.
-                <br>
-                3.Chúc bạn chơi vui vẻ!
-            </p>
-        </div>
-        <div class="level5">
-            <h2>Level 5</h2>
-            <p>
-                1.Ở level này, bạn sẽ phải đối mặt với một thử thách: mỗi 30 giây sẽ có thêm một cặp hình Pokemon mới xuất hiện trên màn hình. 
-                <br>
-                2.Bạn phải thể hiện sự nhanh nhẹn và sự tập trung cao độ để đối phó với thời gian giới hạn và số lượng hình ngày càng tăng.
-                <br>
-                3.Chúc bạn chơi vui vẻ!
-            </p>
-        </div>
-    </div>
-    <!-- Information student -->
-    <div class="student">
-        <h1>Thông tin sinh viên</h1>
-        <p><strong>Họ tên: </strong>Nguyễn Bính</p>
-        <p><strong>MSSV: </strong>21130286</p>
-        <p><strong>Quê quán: </strong>Đăk Lăk</p>
-        <p><strong>Tình trạng hôn nhân: </strong>đọc thân</p>
-        <p><strong>Sức khỏe sinh sản: </strong>tốt</p>
-    </div>
     <script src="js/main.js"></script>
 </body>
 

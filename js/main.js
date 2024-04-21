@@ -41,6 +41,26 @@ $(document).ready(function () {
         "./image/pokemon32.png"
     ];
 
+    const levelInstructions = {
+        1: `<ol>
+                <li>Chào mừng bạn đến với Pikachu - Một trò chơi giải đố kinh điển. Bạn sẽ thấy màn
+                hình hiển thị một lười các biểu tượng pokemon.</li>
+        
+                <li>Nhiệm vụ của trò chơi là tìm những cặp pokemon giống nhau và kết nối chúng.</li>
+                
+                <li>Bạn cần phải chọn vào 2 ô pokemon có hình giống nhau và làm biến mất nó với điều
+                kiện không có pokemon nào chắn trên đường đi của chúng.</li>
+            
+                <li>Đường đi giữa 2 ô pokemon giống nhau có thể là hàng dọc, hàng ngang, theo hình chữ L,
+                chữ U hoặc chữ Z.</li>
+        
+                <li>Trò chơi kết thúc khi tất cả các cặp pokemon được loại bỏ hoặc hết thời gian.</li>
+            
+                <li>Chúc bạn chơi vui vẻ!</li>
+            </ol>`,
+
+        
+    }
 
     const arrShuffle = [30, 25, 20, 15, 15, 10];
     const arrLevel = [1, 2, 3, 4, 5, 6]
@@ -251,7 +271,12 @@ $(document).ready(function () {
     }
     // //lựa chọn sai sẽ bị trừ điểm và thời gian
     function chooseFalse() {
-        
+        if (playerData.score >= 10) {
+            playerData.score -= 10;
+            $("#score").text(playerData.score);
+        } else {
+            $("#score").text(0);
+        }
     }
 
     let selectingItem = null
@@ -423,6 +448,15 @@ $(document).ready(function () {
     //             break;
     //     }
     // })
+
+    function createInstructions(level) {
+        const instructionDiv = $('#game-instruction-content');
+        const levelInstruction = levelInstructions[level];
+
+        instructionDiv.html(levelInstruction);
+    }
+
+
     $('#1').on('click', function () {
         resetPreviousLevelState();
         console.log('level 1');
@@ -433,6 +467,9 @@ $(document).ready(function () {
         clearInterval(intervalLevel5);
         updateDataPlayer(1);
         countDownTime(1000);
+        createInstructions(1);
+        $('#level-modal').hide();
+
     })
     $('#2').on('click', function () {
         resetPreviousLevelState();
@@ -445,6 +482,7 @@ $(document).ready(function () {
         level2();
         updateDataPlayer(2);
         countDownTime(1000);
+        $('#level-modal').hide();
     })
     $('#3').on('click', function () {
         resetPreviousLevelState();
@@ -456,6 +494,7 @@ $(document).ready(function () {
         clearInterval(intervalLevel5);
         updateDataPlayer(3);
         countDownTime(1000);
+        $('#level-modal').hide();
     })
     $('#4').on('click', function () {
         resetPreviousLevelState();
@@ -467,6 +506,7 @@ $(document).ready(function () {
         clearInterval(intervalLevel5);
         updateDataPlayer(4);
         countDownTime(1000);
+        $('#level-modal').hide();
     })
     $('#5').on('click', function () {
         resetPreviousLevelState();
@@ -477,6 +517,7 @@ $(document).ready(function () {
         level5();
         updateDataPlayer(5);
         countDownTime(1000);
+        $('#level-modal').hide();
     })
     $('#random-imgs-btn').on('click', function () {
         console.log('random images');
@@ -735,5 +776,27 @@ $(document).ready(function () {
         }, 30000);
 
     }
+
+    //     sự kiện cho các nút modal
+
+    // mở level modal
+    $('#select-level-btn').on('click', () => {
+        $('#level-modal').css('display', 'flex');
+    });
+
+    // đóng level modal
+    $('#level-modal-close-btn').on('click', () => {
+        $('#level-modal').hide();
+    });
+
+    // mở
+    $('#about-me-btn').on('click', () => {
+        $('#about-modal').css('display', 'flex');
+    });
+
+    // đóng level modal
+    $('#about-modal-close-btn').on('click', () => {
+        $('#about-modal').hide();
+    });
 
 })

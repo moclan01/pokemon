@@ -1,3 +1,43 @@
+@-webkit-keyframes slideIn {
+  from {
+    bottom: -300px;
+    opacity: 0;
+  }
+  to {
+    bottom: 0;
+    opacity: 1;
+  }
+}
+@keyframes slideIn {
+  from {
+    bottom: -300px;
+    opacity: 0;
+  }
+  to {
+    bottom: 0;
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+html {
+  font-family: Arial, sans-serif;
+}
+
 button {
   margin: 0;
   padding: 0;
@@ -8,56 +48,97 @@ image {
   padding: 0;
 }
 
-.container {
+.game-pikachu {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("/image/others/background.jpg");
+  background-size: 100% 100%;
+}
+.game-pikachu .container {
+  margin: 40px 0;
   width: 1400px;
 }
-.container .title {
+.game-pikachu .container .title {
   background-color: rgb(235, 133, 0);
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.container .title .infor {
+.game-pikachu .container .title .name-game {
+  width: 100%;
+  font-size: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: yellow;
+}
+.game-pikachu .container .title .infor {
   display: flex;
   justify-content: space-around;
   width: 100%;
+  font-size: 24px;
 }
-.container .main {
+.game-pikachu .container .main {
   display: flex;
-  width: 1200px;
+  width: 1400px;
   margin-top: 32px;
 }
-.container .main .action-game {
+.game-pikachu .container .main .action-game {
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
-.container .main .action-game .action-button {
+.game-pikachu .container .main .action-game * {
+  margin-top: 1rem;
+}
+.game-pikachu .container .main .action-game .image-pikachu {
+  width: 200px;
+  height: 120px;
+  margin: 1rem 0;
+}
+.game-pikachu .container .main .action-game .image-pikachu .image {
+  width: 200px;
+  height: 120px;
+}
+.game-pikachu .container .main .action-game .score, .game-pikachu .container .main .action-game .level {
+  font-size: 1.2rem;
+}
+.game-pikachu .container .main .action-game .action-button {
   width: 100%;
   height: 36px;
   font-size: 20px;
   border-radius: 5px;
-  background-color: aliceblue;
+  background-color: #FFEC9E;
   margin: 16px 0;
+  border: none;
+  transition: 0.2s ease-in;
 }
-.container .main .action-game .action-button:hover {
-  background-color: aqua;
+.game-pikachu .container .main .action-game .action-button:hover {
+  background-color: #ED9455;
+  transition: 0.2s ease-out;
 }
-.container .main .game-board {
+.game-pikachu .container .main .game-board {
   flex: 3;
-  margin: 0 8px;
+  margin: 0 48px;
 }
-.container .main .game-board .row-board {
+.game-pikachu .container .main .game-board .row-board {
   display: flex;
 }
-.container .main .game-board .row-board .board-item {
+.game-pikachu .container .main .game-board .row-board .board-item {
   width: 48px;
   height: 48px;
   margin: 0;
   padding: 0;
-  transition: opacity;
+  transition: opacity 0.3s;
 }
-.container .main .game-board .row-board .selecting {
+.game-pikachu .container .main .game-board .row-board .selecting {
   opacity: 0.7;
 }
-.container .main .game-board .row-board .empty-item {
+.game-pikachu .container .main .game-board .row-board .empty-item {
   width: 48px;
   height: 48px;
   margin: 0;
@@ -66,30 +147,110 @@ image {
   background-image: none !important;
   border: none;
 }
-.container .main .game-board .row-board .item-hidden {
+.game-pikachu .container .main .game-board .row-board .item-hidden {
   background-color: transparent;
   background-image: none !important;
   border: none;
   padding: 2px;
 }
-.container .main .game-instruction {
-  flex: 2;
-  background-color: bisque;
+.game-pikachu .container .main .game-instruction {
+  display: flex;
+  background-color: rgba(255, 228, 196, 0.62);
+  border-radius: 5px;
+  border: 2px solid orange;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
 }
-
-.content .level1,
-.content .level2,
-.content .level3,
-.content .level4,
-.content .level5 {
+.game-pikachu .container .main .game-instruction #game-instruction-content {
+  width: 100%;
+  padding: 1rem;
+  overflow-y: auto;
+  max-height: 100%;
+}
+.game-pikachu .select-level {
   display: none;
 }
-.content .level1.active,
-.content .level2.active,
-.content .level3.active,
-.content .level4.active,
-.content .level5.active {
+.game-pikachu .content .level1,
+.game-pikachu .content .level2,
+.game-pikachu .content .level3,
+.game-pikachu .content .level4,
+.game-pikachu .content .level5 {
+  display: none;
+}
+.game-pikachu .content .level1.active,
+.game-pikachu .content .level2.active,
+.game-pikachu .content .level3.active,
+.game-pikachu .content .level4.active,
+.game-pikachu .content .level5.active {
   display: block;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: absolute; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  -webkit-animation-name: fadeIn; /* Fade in the background */
+  -webkit-animation-duration: 0.4s;
+  animation-name: fadeIn;
+  animation-duration: 0.4s;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  /* The Close Button */
+}
+.modal-content {
+  background-color: #fefefe;
+  width: max-content;
+  -webkit-animation-name: slideIn;
+  -webkit-animation-duration: 0.4s;
+  animation-name: slideIn;
+  animation-duration: 0.4s;
+}
+.modal-header {
+  padding: 2px 16px;
+  background-color: #ffec9e;
+  color: black;
+}
+.modal-body {
+  padding: 1rem;
+}
+.modal .close {
+  color: black;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.modal .close:hover, .modal .close:focus {
+  color: #c22020;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#level-modal .level-btn {
+  border-radius: 5px;
+  background-color: #FFEC9E;
+  margin: 16px 0;
+  border: none;
+  transition: 0.2s ease-in;
+  padding: 0.5rem;
+  font-size: 20px;
+}
+#level-modal .level-btn:hover {
+  background-color: #ED9455;
+  transition: 0.2s ease-out;
+}
+
+#about-modal * {
+  font-size: 20px;
 }
 
 /*# sourceMappingURL=Style.css.map */
