@@ -59,7 +59,31 @@ $(document).ready(function () {
                 <li>Chúc bạn chơi vui vẻ!</li>
             </ol>`,
 
-        
+        2: `<ol>
+                <li>Ở level này sẽ xuất hiện thêm các tường chắn.</li>
+                <li>Các tường chắn sẽ chặn lối đi của bạn.</li>
+                <li>Bạn cần tìm các đường đi khác mà không xuyên qua tường chắn.</li>
+                <li>Chúc bạn chơi vui vẻ!</li>
+            </ol>`,
+        3: `<ol>
+                <li>Ở level này, cứ 15s sẽ random lại vị trí các ô.</li>
+                <li>Bạn cần phải nhanh tay lẹ mặt trước khi các vị trí bị đảo.</li>
+                <li>Chúc bạn chơi vui vẻ!</li>
+            </ol>`,
+        4: `<ol>
+                <li>Ở level này, bạn phải có trí nhớ tốt.</li>
+                <li>Khi bạn di chuyển con chuột lần đầu đến các ô thì sẽ bị ẩn đi và nó sẽ hiện 1 vùng
+                gồm 9 ô bao quanh con trỏ chuột ở lần thứ 2 trở đi khi di chuyển đến.</li>
+                <li>Chúc bạn chơi vui vẻ!</li>
+            </ol> `,
+        5:`<ol>
+                <li>Ở level này, bạn sẽ phải đối mặt với một thử thách: mỗi 30 giây sẽ có thêm một cặp hình Pokemon
+                mới xuất hiện trên màn hình.</li>
+                <li>Bạn phải thể hiện sự nhanh nhẹn và sự tập trung cao độ để đối phó với thời gian giới hạn và số
+                lượng hình ngày càng tăng.</li>
+                <li>Nhớ để ý thời gian nữa bạn nhé!!</li>
+                <li>Chúc bạn chơi vui vẻ!</li> 
+            </ol>`
     }
 
     const arrShuffle = [30, 25, 20, 15, 15, 10];
@@ -221,6 +245,8 @@ $(document).ready(function () {
 
     let arrBoard = createGameBoard(rowGameBoard, colGameBoard);
     handleClick();
+    countDownTime(1000);
+    createInstructions(1);
 
     // xử lý sự kiện bấm
     function handleClick() {
@@ -432,22 +458,9 @@ $(document).ready(function () {
             if (time < 0) {
                 console.log("hết giờ");
                 $('#time').html('hết giờ');
-                // clearInterval(countDownInterval);
             }
         }, 1000);
     }
-
-    // $('.level-btn').on('click', function () {
-    //     let level = $(this).attr('id');
-    //     switch (level) {
-    //         case '1':
-
-    //             break;
-
-    //         default:
-    //             break;
-    //     }
-    // })
 
     function createInstructions(level) {
         const instructionDiv = $('#game-instruction-content');
@@ -460,7 +473,6 @@ $(document).ready(function () {
     $('#1').on('click', function () {
         resetPreviousLevelState();
         console.log('level 1');
-        isLevel5 = false;
         isLevel4 = false;
         isLevel2 = false;
         clearInterval(intervalLV3);
@@ -475,25 +487,25 @@ $(document).ready(function () {
         resetPreviousLevelState();
         console.log('level 2');
         isLevel2 = true;
-        isLevel5 = false;
         isLevel4 = false;
         clearInterval(intervalLV3);
         clearInterval(intervalLevel5);
         level2();
         updateDataPlayer(2);
         countDownTime(1000);
+        createInstructions(2);
         $('#level-modal').hide();
     })
     $('#3').on('click', function () {
         resetPreviousLevelState();
         console.log('level 3');
         isLevel2 = false;
-        isLevel5 = false;
         isLevel4 = false;
         level3();
         clearInterval(intervalLevel5);
         updateDataPlayer(3);
         countDownTime(1000);
+        createInstructions(3);
         $('#level-modal').hide();
     })
     $('#4').on('click', function () {
@@ -501,11 +513,11 @@ $(document).ready(function () {
         console.log('level 4');
         isLevel2 = false;
         isLevel4 = true;
-        isLevel5 = false;
         clearInterval(intervalLV3);
         clearInterval(intervalLevel5);
         updateDataPlayer(4);
         countDownTime(1000);
+        createInstructions(4);
         $('#level-modal').hide();
     })
     $('#5').on('click', function () {
@@ -517,6 +529,7 @@ $(document).ready(function () {
         level5();
         updateDataPlayer(5);
         countDownTime(1000);
+        createInstructions(5);
         $('#level-modal').hide();
     })
     $('#random-imgs-btn').on('click', function () {
@@ -637,9 +650,6 @@ $(document).ready(function () {
         shuffle = playerData.shuffle;
         handleClick();
 
-
-        // // Bắt đầu lại đếm ngược thời gian
-        // countDownTime(playerData.timeIndex);
     }
 
     function checkWin() {
